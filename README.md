@@ -70,7 +70,7 @@ To get started with the Dr. AI mobile application, follow these steps:
 - **`Step 1`:** Clone the Repository
 First, you'll need to clone the repository from GitHub. Open your terminal and run the following command:
 ```
-git clone https://github.com/MAHMOUDELSAYED69/DR-AI.git
+git clone https://github.com/MAHMOUDELSAYED7/DR-AI.git
 ```
 Replace <repository-url> with the actual URL of your repository if it was changed.
 
@@ -192,7 +192,7 @@ This project is licensed under the [MIT License] - see the LICENSE file for deta
 
 ## Support
 
-For any inquiries or support regarding Dr. AI, you can reach out to [gcfjxvkj@gmail.com] - [mohammedhafiez.h@gmail.com].
+For any inquiries or support regarding Dr. AI, you can reach out to [mahmoudelsayed.dev@gmail.com] - [mohammedhafiez.h@gmail.com].
 
 ---
 
