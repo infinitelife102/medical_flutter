@@ -1,0 +1,221 @@
+[33m6599cc3[m[33m ([m[1;31morigin/main[m[33m)[m Update README.md
+[33m4005158[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m empty commit
+[33m6e70ca7[m change Bitmap color in map screen
+[33m7475bdb[m modify folders structure
+[33mb4ce888[m modify LocationHelper.
+[33m6761bd6[m modify sign up cubit, app router, email screen and password screen, and forget password drawer.
+[33mb5f1e15[m refactor padding in custom text field and dropdown field.
+[33md0a333c[m add bloc providers to app router.
+[33md984ca6[m Update README.md
+[33m9ad90fe[m update dependencies.
+[33m409bca5[m refactor FindHospitalWebService, and getNearestHospital cubit method.
+[33m124e2e1[m modify SpeechToText in chat screen.
+[33m1d2b88f[m modify CustomTitleBackButton, and  custom text form field, dropdownbotton, and buttons widgets.
+[33me740396[m refactor padding in screens.
+[33m00de353[m Update README.md
+[33mf6cee2c[m modify maps screen, find hospital drawer and time and distance card.
+[33m2f22919[m create convertDuration method and modify type key in place web service.
+[33m6ddd92d[m Complete the last message: refactor maps screen and create find hospital drawer, markers methods, and change nearest hospital marker color method.
+[33mf1c26fe[m modify  icons in FloatingSearchBar and create CustomToolTip and use it in navbar
+[33mad34f5d[m create getNearestHospitals method and state in maps cubit
+[33m8a41b11[m create FindHospitalWebService class and get hospital and place details.
+[33m618b40e[m class FindHospitalsPlaceInfo model.
+[33mc3254db[m create setListOfMaps and setLastUpdatedTime in cachedata class.
+[33md10277b[m create drawer, floating action button to open drawer in map screen.
+[33mff7baac[m create getFieldDirection in validation cubit, modify the chat text field, increase the Duration of dialogs.
+[33med470bd[m refactor all dialog and create customDialogWithAnimation modify app router, app theme, modify buttons in edit profile screen, modify chat bubble for loading.
+[33m287588d[m modify scaffold snackbar,  and create speech to text methods and provide it in chat screen, refactor hint text in custom dropdownmenubutton.
+[33mb5d80c7[m create dateTimeFormatter in chat cubit, refactor chat bubble for drai and add more features.
+[33mdbf3d0f[m add hive db, create hive model and refactor all methods in chat cubit, create GenerativeAiWebService post and stream data, refactor chat bubble and chat screen.
+[33m0cda822[m Merge branch 'main' of https://github.com/MahmoudElSayed96/dr_ai
+[33md35de26[m modify AppTheme class and chat screen.
+[33m0c3e974[m Update README.md
+[33mc8bfcf9[m Update README.md
+[33mdd70089[m create _buildFloatingActionButton widget, _scrollToEnd method, addListener method in chat screen, and modify CustomDropDownField.
+[33m0f6dab1[m create getTextDirection in validation cubit, modify text directions in chat bubbles.
+[33ma778e26[m modify DropdownButtonFormField and PopupMenuButton.
+[33m093626b[m create BuildProfileCard, and modify about us screen and account screen.
+[33m4668ea7[m refactor LaunchUri Cubit, modify floating search bar widget, and remove remove unused files.
+[33mae45c2b[m create getNearestHospital web service.
+[33med45939[m modify app bar theme and old password screen.
+[33m7943752[m add pop scope to change password and login dialog, modify nav bar pop scope.
+[33m9a5cf61[m modify delete account screen, and create _onWillPop method.
+[33mfac00ed[m modify custom dialog , refactor delete account screen and scroll app bar.
+[33m9956f9c[m remove delete account dialog and modify sign up state in create profile screen.
+[33m99c0a1b[m create ReAuthScreen to delete password and refactor UpdatePasswordStepper.
+[33m62d96a7[m create new DeleteAccountDialog.
+[33m45ffd12[m refactor page transition manager class, refactor delete methods in account cubit, modify check email in sign up cubit.
+[33me1f9443[m  add more page transitions in page transition manager class.
+[33m43ef03a[m convert the text widget to SelectableText and modify the theme of ChatBubbleForDrAi widget and ChatBubbleForGuest widget.
+[33m10e3d63[m build _buildEmptyChatBackgroud widget and buildLoadingIndicator widget, refactor delete method and add deleting state to bloc consumer in chat screen.
+[33mb7ce0f9[m create PopupMenuButton and provide the delete method in chat screen.
+[33mee55ddd[m modify reAuth method and create deleteChatHistory in chat cubit.
+[33mff75bb4[m create checkIfEmailInUse method and provide it in email screen.
+[33m5506c84[m modify get profile data method, location helper, logout cubit and provide bloc listener and modify goToMyCurrentLocation method.
+[33m3bd7b11[m handle time out in account cubit methods.
+[33mc0278bf[m modify fetchPlaceSuggestions and maps cubit.
+[33m56262f9[m create ChangePasswordDialog.
+[33mdfbf9a5[m modify delete method, rating screen and buildProfileCard
+[33me04eb8c[m refactor rating method and provie it in rating screen
+[33mc36703c[m create rating method and rating states in account cubit.
+[33m9f2a655[m modify custom snackbar, build profile card, edit user and forgetpassword bottom sheets.
+[33m9827159[m refactor delete account method.
+[33m3066f45[m create LoginDialog and add it in create account screen.
+[33m4e712e5[m refactor ratingus widget
+[33mfb87134[m build RatingScreen and display it in dialog.
+[33mfa38be4[m change navigator transition in old password screen, add add custom snack bar in succrss state in new password screen.
+[33md8c51ee[m create about of us screen
+[33m2dbecf0[m add states to reauth and update password methods, create bloc consumer in old and new password to hadle states
+[33maf8e2b7[m create reauth user method and update password method, and refactor old and new password ui.
+[33mf268f10[m build new password screen.
+[33m50751b2[m create old password screen.
+[33m90713a9[m create update password stepper.
+[33m76fedb3[m finish edit profile screen.
+[33mcd2b5fd[m add cache map methods set and get, display user data im edit profile screen.
+[33mb012384[m refactor custom buttom sheet, add bloc consumer to edit profile screen.
+[33m4008be5[m create edit profile screen.
+[33m33f966c[m modifing google service in android folder.
+[33m99cdaf2[m create social auth cubit.
+[33mf93ccef[m create social auth cubit.
+[33me0ecf99[m refactor delete account, refactor chat cubit, sign in bloc consumer and contact card, change bg custom button color when state is loading.
+[33m93d99e7[m[33m ([m[1;35mrefs/stash[m[33m)[m WIP on main: 8179c2f refactor custom snack bar, add validate firebase exceptions, add three dob validation methods, refactor login bloc consumer.
+[33m8920c37[m index on main: 8179c2f refactor custom snack bar, add validate firebase exceptions, add three dob validation methods, refactor login bloc consumer.
+[33m8179c2f[m refactor custom snack bar, add validate firebase exceptions, add three dob validation methods, refactor login bloc consumer.
+[33m5b0c72a[m refactor snack bar color in failure states in all cubits.
+[33m435c78f[m remove upload and load image, provide the account cubit in custom dialog, refactor account cubit, make the custom button disabled when method is running.
+[33m92e7f61[m refactor load and upload photo methods.
+[33maaf6fc1[m create uploadUserPhoto  cubit method, refactor custom bottom sheet.
+[33m843e5d6[m build edit profile widget and bottomsheet,  refactor custom dialog, custom snack bar, create update user name mehtod.
+[33m181a504[m refactor custom dialog method.
+[33m83c0b82[m create update user data method, update password and build dark mode card.
+[33m2444848[m finish refactor in map screen and floating search bar.
+[33m8e67831[m more refactors in map screen
+[33mb39cc04[m more refactor in amp screen
+[33m9f003da[m refactor meshods in maps screen and floating search bar
+[33m27cf096[m refactor ditaled card for distance and time.
+[33m5b927f5[m refactor all color in map screen, and refactor floating search bar widget.
+[33md0f9fc0[m build logout dialog.
+[33m55d91b7[m refactor custom dialog, create delete account method in account cubit.
+[33mccbaed4[m refactor custom dialog, and get user data method.
+[33mb94b000[m refactor cutom dialog, finish account logout method, convert bloc builder to bloc consumer in account screen.
+[33m0333ca8[m finish getProfileData method, logout method and provide cubit in account screen.
+[33m03c341f[m create user data model
+[33mc9d14d3[m create account cubit.
+[33m6927b98[m build profile card and custom divider.
+[33m107f900[m build user card.
+[33md04a640[m refactor main screen, refactor chat cubit,  refactor chat screen.
+[33ma0cb19c[m create  LaunchUri cubit.
+[33ma1b15da[m refactor chat cubit and create clear messages method.
+[33m404b1fa[m add hive pedendencies, build hive db model, refactor app bar theme.
+[33m5b8cdd0[m refactor app bar theme, build logout button, chnage nav bar height.
+[33m2aa751e[m create text scale factor in matrial app.
+[33mef7336d[m refactor chat bubles, add more color
+[33mc394b1c[m refactor chat screen and chat bubbles card.
+[33md8ef6e7[m refactor app bar theme, refactor chat screen.
+[33m1da389d[m refactor nav bar.
+[33mb41228d[m add more assets, refactor nav bar screen.
+[33m9803c3c[m refactor home screen and all widget inside it, refactor contact card, refactor 3 svg images.
+[33m00f1a99[m create validateFirebaseException method and refactor custom snackbar.
+[33m1b53d72[m refactor login cubit and chage name to sign in cubit.
+[33mf4a3bc1[m finish sign up cubit and provide it in create profile screen,
+[33mf5020da[m create sign up cubit.
+[33maeda2b2[m create custom dialog.
+[33m6833087[m add animation style in matrial app, add icon to Item model, change the responsive text value.
+[33m62adfb2[m refactor the way to call validation methos in cubit. remove custom drop down folder.
+[33m6d7a31e[m add validation methods to text form field in login screen.
+[33m294b892[m refactor text field, create custom drop down field, refactor gender list and blood types list.
+[33mbd6820a[m create validation date of birth method.
+[33mbe7c423[m create custom drop down button.
+[33m0ef91ce[m change navigator transitions.
+[33md117893[m create Backbutton and provide it in email, password and create profile screens.
+[33mea9c06d[m create buildSuffixIcon method in custom text form field, create buildDropDownbutton widget method.
+[33m2b258c4[m create name, phone, height, weight validation methods.
+[33m9626f8b[m build create profile screen.
+[33m34c0539[m create TextSelectionTheme, refactor RegExp in hasValidEmail use validate method in email screen.
+[33mcc697d0[m build validation cubit  and build password screen.
+[33m0694cac[m finish email screen ui,
+[33maccb139[m build MyStepperForm
+[33mdfd2b45[m refactor forget password, build button loading indicator.
+[33mfab846c[m create PageTransitionManager.
+[33m437a0c5[m refactor forget password and social login card.
+[33mf53bba4[m refactor inputDecorationTheme, custom divider, signUp button and custom textformfield.
+[33m8745a7f[m refactor, matrialApp, create more extention, create checkbox,outlinedButton,elvatedbutton themes, refactor login screen, and refactor all extraction widget inside it.
+[33mfd59b21[m create app router class.
+[33m830eef7[m create app theme class.
+[33m3a70870[m create color manager class and font manager class, and refactor ui in login screen.
+[33m9f9abe7[m create extentions for text, media query, bloc, navigator.
+[33mde0c0b0[m create  ImageManager, and add replcae png images with svg images.
+[33me1346d9[m build email screen.
+[33mca8214b[m refactor widgets in login screen.
+[33mca43f14[m finish login screen.
+[33mc26c961[m update login screen ui and add font family.
+[33m0b8f9a6[m finish splash screen.
+[33m5bf0936[m update splash screen ui.
+[33m020b21c[m refactor maps screen.
+[33m183cbbf[m refactor place directions model, maps cubit  and provide place directions methods in maps screen.
+[33m8aa0305[m build place direction details card.
+[33m6701e0f[m build get place direction cubit method.
+[33m4069f0d[m build place firections model.
+[33m60a463b[m build get directions method.
+[33m39520ab[m refactor get place method.
+[33m92ab7d8[m refactor floating search bar method , build selected place loaction method and add markers to maps.
+[33m2c3c093[m refactor ui in home and profile screens.
+[33m945ed66[m refactor all api method in api folder.
+[33mbb073fb[m build get Place Location method in Maps cubit and refactor maps state.
+[33mf845dfd[m buid fetch place location method.
+[33m36ea435[m build place location model.
+[33m4305dcf[m build query method in floating search bar widget, add uuid package.
+[33m73b788a[m refactor map cubit and fetch suggetions method.
+[33mf97a530[m build maps cubit.
+[33md9dd0fb[m refactor fetchSuggestions method.
+[33m5f50405[m build place fetch suggestions method with dio.
+[33m30be122[m build place suggetion model.
+[33mc9340c3[m build floating search bar and refactor google map screen.
+[33m9848cd3[m build google map screen and get creent location method.
+[33mbde8bb5[m build custom logout cubit.
+[33m278b948[m add open contact app method.
+[33m15a353f[m add geolocator and google map flutter.
+[33m8f0a8ea[m build api keys class and add google maps package.
+[33m606fe01[m refactor images class, build mental health card.
+[33me213087[m change foucs border color in text form field, refactor chat cubit consumer.
+[33ma660282[m add loading indicator package and build chat bubble for loading, refactor chat cubit.
+[33m3f4c959[m build custom divider.
+[33m7f25918[m build routes screen and refactor all navigator routes in ui.
+[33m00d7b1d[m build images class and refactor all images in ui.
+[33mc4d2a45[m refactor home, maps,chat and setting screens.
+[33ma264983[m create custom color class and replace all refactor all color in ui.
+[33m3a527f3[m refactor screen folder structure.
+[33m138b4a8[m refactor image cubit, refactor chat screen ui, refactor screen folder structure.
+[33m8f717e2[m refactor login and register bloc consumer, and provide verify email method.
+[33m0edb6a7[m remove fetch image method in cloud store service, refactor chat cubit,
+[33m48d772b[m build chat message model, refactor post data method,build new chat message cubit and refactor chat screen.
+[33mfcede74[m refactor logout method in profile screen and refactor send icon in chat screen.
+[33ma9bdac2[m refactor profile, archive, home screens.
+[33m232993c[m enableOnBackInvokedCallback in android mainfest, refactor image cubit , profile screen ui and logic.
+[33mfd68095[m refactor register func in cubit and firebase service.
+[33m916fc88[m provide forget password cubit in matrial and refactor the forget password screen and build bloc comsumer.
+[33maa0e2c8[m build forget password cubit.
+[33med71b0a[m refactor login and register cubit.
+[33mde59935[m create firebase service folder.
+[33mdad1596[m refactor auth screen ui.
+[33m77421e4[m remove otp and reset password screens, and refactor view folder structure.
+[33mede8e06[m refactor 3 custom widgets.
+[33m8dc271a[m handle MediaQuery in profile screen
+[33mcbbcb68[m handle image error
+[33m15b6522[m change project name add more features in firebase
+[33m1d559de[m another commit
+[33m8bda8ba[m كومت بلا هدف
+[33m75c0f43[m remove splash text theme
+[33mee4b446[m create Splash text theme
+[33me040cfc[m Merge branch 'main' of https://github.com/MahmoudElSayed96/dr_ai
+[33ma91e602[m كمان كومت ياريس
+[33m27f6297[m Update README.md
+[33m582a7b7[m عملت حاجات كتير اوي مش هعرف اكتبلها كومت
+[33mb01c8ff[m handling keyboard and navigator problems.
+[33m9b9f1d5[m Add Chat
+[33m2ff37b3[m نسيت اعمل كومت بقالي يومين بس دي اخر حاجه
+[33m97bb1ce[m create firebase project and initialize in flutter
+[33maa450ba[m create Authentication ui and add more assets
+[33m9ba89be[m create a login,register screen and a custom widget
+[33m3cd9034[m create a splash screen add assets and google fonts
+[33m0d92c46[m create a project structure
