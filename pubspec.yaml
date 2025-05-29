@@ -32,13 +32,13 @@ dependencies:
   bloc: ^8.1.2
   build_runner: ^2.4.11
   cached_network_image: ^3.3.1
-  cloud_firestore: ^4.13.3
+  cloud_firestore: ^5.6.8
   cupertino_icons: ^1.0.2
   dio: ^5.4.0
   dropdown_button2: ^2.3.6
   easy_stepper: ^0.8.3
-  firebase_auth: ^4.15.0
-  firebase_core: ^2.24.0
+  firebase_auth: ^5.5.4
+  firebase_core: ^3.13.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3

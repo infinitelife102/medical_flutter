@@ -18,7 +18,7 @@ import path_provider_foundation
 import shared_preferences_foundation
 import sign_in_with_apple
 import speech_to_text
-import sqflite
+import sqflite_darwin
 import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
