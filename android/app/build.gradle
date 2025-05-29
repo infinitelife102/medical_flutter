@@ -27,11 +27,10 @@ android {
     namespace "com.example.dr_ai"
     compileSdkVersion 34
     buildToolsVersion '31.0.0'
-    ndkVersion flutter.ndkVersion
-
+    ndkVersion '26.1.10909125'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8 
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
