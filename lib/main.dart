@@ -18,3 +18,4 @@ Future<void> main() async {
   Hive.registerAdapter(ChatMessageModelAdapter());
   runApp(const MyApp());
 }
+
