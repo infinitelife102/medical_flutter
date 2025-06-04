@@ -37,6 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late ScrollController _scrollController;
   Timer? _noInputTimer;
   final Duration _noInputDuration = const Duration(seconds: 5);
+
   @override
   void initState() {
     super.initState();
@@ -133,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _getMessages() async {
-    if (_chatMessageModel.isEmpty) await context.read<ChatCubit>().initHive ();
+    if (_chatMessageModel.isEmpty) await context.read<ChatCubit>().initHive();
   }
 
   @override
@@ -238,7 +239,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ImageManager.chatIcon,
             width: 100.w,
             height: 100.h,
-            // ignore: deprecated_member_use
+// ignore: deprecated_member_use
             color: ColorManager.green,
           ),
           Gap(16.h),

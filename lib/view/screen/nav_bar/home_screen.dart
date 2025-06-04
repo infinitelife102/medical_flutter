@@ -2,6 +2,7 @@ import 'package:dr_ai/utils/constant/image.dart';
 import 'package:dr_ai/utils/constant/routes.dart';
 import 'package:dr_ai/utils/helper/extention.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
+import 'package:dr_ai/view/widget/medical_tip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -23,6 +24,12 @@ class HomeScreen extends StatelessWidget {
             children: [
               Gap(32.h),
               _buildChatCard(context),
+              Gap(32.h),
+              const MedicalTipCard(
+                  title: "Demo Medical Record",
+                  description:
+                      "Lorem Lorem Lorem Lorem Lorem Lorem LoremLorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ",
+                  isArabic: false),
               Gap(32.h),
               _buidContactsCard(),
               Gap(32.h),

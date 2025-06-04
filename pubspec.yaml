@@ -29,7 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_bottom_navigation_bar: ^1.3.0
-  bloc: ^8.1.2
+  avatar_glow: ^3.0.1
+  bloc: ^9.0.0
   build_runner: ^2.4.11
   cached_network_image: ^3.3.1
   cloud_firestore: ^5.6.8
@@ -41,15 +42,16 @@ dependencies:
   firebase_core: ^3.13.1
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.1.3
+  flutter_bloc: ^9.1.1
   flutter_dotenv: ^5.1.0
-  flutter_facebook_auth: ^6.2.0
+  flutter_facebook_auth: ^7.1.2
   flutter_polyline_points: ^2.0.0
   flutter_screenutil: ^5.9.0
   flutter_svg: ^2.0.10+1
+  flutter_tts: ^4.2.3
   formatted_text: ^4.0.1
   gap: ^3.0.1
-  geolocator: ^11.0.0
+  geolocator: ^14.0.1
   google_generative_ai: ^0.4.3
   google_maps_flutter: ^2.5.3
   google_sign_in: ^6.1.6
@@ -57,23 +59,23 @@ dependencies:
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.1
   image_picker: ^1.0.4
-  intl: ^0.19.0
+  intl: ^0.20.2
   loading_indicator: ^3.1.1
-  location: ^6.0.1
-  lottie: ^2.4.0
+  location: ^8.0.0
+  lottie: ^3.3.1
   material_floating_search_bar_2: ^0.5.0
   meta: ^1.10.0
   modal_progress_hud_nsn: ^0.5.1
   path_provider: ^2.1.3
   shared_preferences: ^2.2.2
-  sign_in_with_apple: ^6.1.0
+  sign_in_with_apple: ^7.0.1
   speech_to_text: ^7.0.0
   url_launcher: ^6.2.4
   uuid: ^4.3.3
 
 dev_dependencies:
-  flutter_launcher_icons: "^0.13.1"
-  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.3
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
 flutter_launcher_icons:

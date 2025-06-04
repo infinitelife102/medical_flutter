@@ -19,13 +19,13 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ChatCubit(),
+          create: (_) => ChatCubit(),
         ),
         BlocProvider(
-          create: (context) => ValidationCubit(),
+          create: (_) => ValidationCubit(),
         ),
         BlocProvider(
-          create: (context) => AccountCubit(),
+          create: (_) => AccountCubit(),
         ),
       ],
       child: ScreenUtilInit(
@@ -50,6 +50,11 @@ class MyApp extends StatelessWidget {
                   ),
                   color: ColorManager.white,
                   debugShowCheckedModeBanner: false,
+                  supportedLocales: const [
+                    Locale('en', 'US'),
+                    Locale('ar', 'EG'),
+                  ],
+                  locale: const Locale('en', 'US'),
                   title: 'Dr AI',
                   theme: AppTheme.lightTheme,
                   initialRoute: RouteManager.initialRoute,
