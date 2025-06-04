@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:dr_ai/data/service/firebase/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -53,10 +56,18 @@ class SignInCubit extends Cubit<SignInState> {
       {required String email, required String password}) async {
     emit(SignInLoading());
     try {
+      log("User init sign in with email: $email");
       UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
+          .signInWithEmailAndPassword(email: email, password: password)
+          .timeout(Duration(seconds: 30), onTimeout: () {
+        emit(SignInFailure(message: "Sign in timed out. Please try again."));
+        throw TimeoutException(
+            "Sign in timed out after 30 seconds. Please try again.");
+      });
+      log("User finish in: ${userCredential.user!.email}");
       if (userCredential.user!.emailVerified == true) {
         emit(SignInSuccess());
+        log("User signed in successfully: ${userCredential.user!.email}");
       } else if (userCredential.user!.emailVerified == false) {
         await FirebaseService.emailVerify();
         emit(EmailNotVerified(
@@ -65,8 +76,11 @@ class SignInCubit extends Cubit<SignInState> {
       }
     } on FirebaseAuthException catch (err) {
       final errMessage = _validateFirebaseException(err.code);
+      log("FirebaseAuthException: ${err.code} - $errMessage");
+
       emit(SignInFailure(message: errMessage ?? err.code));
     } catch (err) {
+      log("Unexpected error during sign in: $err");
       emit(SignInFailure(message: err.toString()));
     }
   }
