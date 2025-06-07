@@ -4,10 +4,12 @@ import 'package:dr_ai/utils/helper/extention.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/medical_tip_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import '../../../utils/constant/color.dart';
 import '../../../logic/chat/chat_cubit.dart';
+import '../../../logic/medical_tips/medical_tips_cubit.dart';
 import '../../widget/contact_card.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -25,11 +27,10 @@ class HomeScreen extends StatelessWidget {
               Gap(32.h),
               _buildChatCard(context),
               Gap(32.h),
-              const MedicalTipCard(
-                  title: "Demo Medical Record",
-                  description:
-                      "Lorem Lorem Lorem Lorem Lorem Lorem LoremLorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem  Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem Lorem ",
-                  isArabic: false),
+              BlocProvider(
+                create: (context) => MedicalTipsCubit(),
+                child: const MedicalTipCard(),
+              ),
               Gap(32.h),
               _buidContactsCard(),
               Gap(32.h),
