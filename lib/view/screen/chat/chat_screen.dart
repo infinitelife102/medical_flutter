@@ -16,6 +16,7 @@ import '../../../utils/helper/extention.dart';
 import '../../../utils/constant/image.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:dr_ai/view/screen/chat/voice_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -135,6 +136,13 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _getMessages() async {
     if (_chatMessageModel.isEmpty) await context.read<ChatCubit>().initHive();
+  }
+
+  void _navigateToVoiceScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const VoiceChatScreen()),
+    );
   }
 
   @override
@@ -296,16 +304,11 @@ class _ChatScreenState extends State<ChatScreen> {
           mainAxisAlignment: MainAxisAlignment.end,
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (_speechToText.isNotListening)
-              IconButton(
-                onPressed: _startListening,
-                icon: SvgPicture.asset(ImageManager.recordIcon),
-              ),
-            if (_speechToText.isListening)
-              IconButton(
-                onPressed: _stopListening,
-                icon: const Icon(Icons.stop, color: Colors.red),
-              ),
+            IconButton(
+              onPressed: _navigateToVoiceScreen,
+              icon: SvgPicture.asset(ImageManager.recordIcon),
+              tooltip: 'الانتقال إلى محادثة صوتية',
+            ),
             IconButton(
               onPressed: () => _sendMessage(),
               icon: const Icon(
