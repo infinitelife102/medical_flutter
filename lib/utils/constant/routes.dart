@@ -1,4 +1,4 @@
-abstract class RouteManager {
+class RouteManager {
   RouteManager._();
   static const initialRoute = "/";
   static const login = "/login";

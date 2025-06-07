@@ -3,7 +3,7 @@ import 'package:dr_ai/utils/constant/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-abstract class AppTheme {
+ class AppTheme {
   //!! LIGHT THEME
   static ThemeData get lightTheme {
     return ThemeData(

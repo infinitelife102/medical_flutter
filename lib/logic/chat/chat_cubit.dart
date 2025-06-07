@@ -77,6 +77,43 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
+  // This method is specifically designed for the voice chat feature
+  // It sends a message and waits for the response before completing
+  Future<void> sendMessageAndWaitForResponse({required String message}) async {
+    emit(ChatSenderLoading());
+    try {
+      // Add user's message to chat history
+      final chatMessageModel = ChatMessageModel(
+        isUser: true,
+        message: message.trim(),
+        timeTamp: dateTimeFormatter(),
+      );
+      await _messagesBox?.add(chatMessageModel);
+      emit(ChatSendSuccess());
+
+      // Get response from AI
+      emit(ChatReceiverLoading());
+      final response = await GenerativeAiWebService.postData(text: message);
+      log(response.toString());
+
+      // Add AI response to chat history
+      await _messagesBox?.add(ChatMessageModel(
+        isUser: false,
+        message: response ?? "ERROR",
+        timeTamp: dateTimeFormatter(),
+      ));
+
+      // Emit updated messages to update UI
+      List<ChatMessageModel> messages =
+          _messagesBox?.values.toList().reversed.toList() ?? [];
+      emit(ChatReceiveSuccess(response: messages));
+    } on HiveError catch (err) {
+      emit(ChatFailure(message: err.message.toString()));
+    } catch (e) {
+      emit(ChatFailure(message: e.toString()));
+    }
+  }
+
   Future<void> deleteAllMessages() async {
     emit(ChatDeletingLoading());
     try {

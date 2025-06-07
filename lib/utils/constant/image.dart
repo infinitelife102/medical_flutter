@@ -26,7 +26,7 @@
 //   static const healthA6 = "assets/images/heath_6.png";
 // }
 
-abstract class ImageManager {
+ class ImageManager {
   ImageManager._();
   //? SVG
   static const String splashLogo = "assets/images/logo_dr_ai.svg";

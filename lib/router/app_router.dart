@@ -23,7 +23,7 @@ import '../view/screen/account/edit_profile_screen.dart';
 import '../view/screen/splash_screen.dart';
 import 'page_transition.dart';
 
-abstract class AppRouter {
+class AppRouter {
   AppRouter._();
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {

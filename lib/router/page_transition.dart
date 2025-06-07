@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-abstract class PageTransitionManager {
+class PageTransitionManager {
   PageTransitionManager._();
   //? default transition
   static materialPageRoute(Widget screen) {

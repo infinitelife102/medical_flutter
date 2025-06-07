@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-abstract class ApiUrlManager {
+ class ApiUrlManager {
   ApiUrlManager._();
   static String pyDrAi = dotenv.env['pyDrAi']!;
   static String googleMapApiKey = dotenv.env['mapApiKey']!;
