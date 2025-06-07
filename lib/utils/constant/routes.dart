@@ -1,5 +1,6 @@
 class RouteManager {
   RouteManager._();
+
   static const initialRoute = "/";
   static const login = "/login";
   static const email = "/email";
@@ -9,12 +10,12 @@ class RouteManager {
   static const home = "/home";
   static const nav = "/nav";
   static const chat = "/chat";
+  static const voice = "/voice";
   static const editProfile = "/editProfile";
   static const maps = "/maps";
   static const oldPassword = "/oldPassword";
   static const newPassword = "/newPassword";
-  static const aboutUs = "/aboutUs";  
-  static const reAuthScreen = "/reAuthScreen";  
-  static const deleteAccount = "/deleteAccount";  
-  
+  static const aboutUs = "/aboutUs";
+  static const reAuthScreen = "/reAuthScreen";
+  static const deleteAccount = "/deleteAccount";
 }

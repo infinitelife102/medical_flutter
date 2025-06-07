@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'package:dr_ai/utils/constant/routes.dart';
 import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -139,9 +140,9 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _navigateToVoiceScreen() {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(builder: (context) => const VoiceChatScreen()),
+      RouteManager.voice,
     );
   }
 

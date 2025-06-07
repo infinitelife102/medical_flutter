@@ -142,9 +142,9 @@ class _ChatBubbleForDrAiState extends State<ChatBubbleForDrAi> {
 
 class ChatBubbleForGuest extends StatelessWidget {
   const ChatBubbleForGuest({
-    Key? key,
+    super.key,
     required this.message,
-  }) : super(key: key);
+  });
 
   final String message;
 

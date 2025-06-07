@@ -16,6 +16,7 @@ import '../view/screen/account/change_password/old_password_screen.dart';
 import '../view/screen/auth/create_profile.dart';
 import '../view/screen/auth/email_screen.dart';
 import '../view/screen/chat/chat_screen.dart';
+import '../view/screen/chat/voice_screen.dart';
 import '../view/screen/nav_bar/home_screen.dart';
 import '../view/screen/nav_bar/maps_screen.dart';
 import '../view/screen/nav_bar/nav_bar_screen_.dart';
@@ -25,6 +26,7 @@ import 'page_transition.dart';
 
 class AppRouter {
   AppRouter._();
+
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteManager.initialRoute:
@@ -73,6 +75,10 @@ class AppRouter {
       case RouteManager.chat:
         return PageTransitionManager.materialPageRoute(
           const ChatScreen(),
+        );
+      case RouteManager.voice:
+        return PageTransitionManager.materialBottomToTopTransition(
+          const VoiceChatScreen(),
         );
       case RouteManager.editProfile:
         return PageTransitionManager.materialSlideTransition(

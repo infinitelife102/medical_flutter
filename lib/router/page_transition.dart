@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class PageTransitionManager {
   PageTransitionManager._();
+
   //? default transition
   static materialPageRoute(Widget screen) {
     return MaterialPageRoute(builder: (context) => screen);
@@ -13,6 +14,29 @@ class PageTransitionManager {
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
         const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var slideAnimation = animation.drive(tween);
+        var fadeAnimation =
+            Tween<double>(begin: 0.0, end: 1.0).animate(animation);
+        return SlideTransition(
+          position: slideAnimation,
+          child: FadeTransition(
+            opacity: fadeAnimation,
+            child: child,
+          ),
+        );
+      },
+    );
+  }
+
+  static PageRouteBuilder bottomToTopTransition(Widget screen) {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0); // Start from bottom
+        const end = Offset.zero; // End at top (default position)
         const curve = Curves.ease;
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
@@ -175,6 +199,11 @@ class PageTransitionManager {
   static CustomMaterialPageRoute materialSlideTransition(Widget screen) {
     return CustomMaterialPageRoute(builder: (context) => screen);
   }
+
+  static CustomMaterialPageRouteBottomUp materialBottomToTopTransition(
+      Widget screen) {
+    return CustomMaterialPageRouteBottomUp(builder: (context) => screen);
+  }
 }
 
 class CustomMaterialPageRoute<T> extends MaterialPageRoute<T> {
@@ -201,6 +230,47 @@ class CustomMaterialPageRoute<T> extends MaterialPageRoute<T> {
           child: FadeTransition(
             opacity: fadeAnimation,
             child: child,
+          ),
+        );
+      },
+      child: child,
+    );
+  }
+}
+
+class CustomMaterialPageRouteBottomUp<T> extends MaterialPageRoute<T> {
+  CustomMaterialPageRouteBottomUp({
+    required super.builder,
+    super.settings,
+  });
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return AnimatedBuilder(
+      animation: animation,
+      builder: (context, child) {
+        const beginOffset = Offset(0.0, 1.0); // Start from bottom
+        const endOffset = Offset.zero; // End at top
+        const curve = Curves.easeInOut; // Smoother curve
+        var slideTween = Tween(begin: beginOffset, end: endOffset)
+            .chain(CurveTween(curve: curve));
+        var slideAnimation = animation.drive(slideTween);
+
+        var fadeAnimation = Tween<double>(begin: 0.0, end: 1.0)
+            .animate(CurvedAnimation(parent: animation, curve: curve));
+
+        var scaleAnimation = Tween<double>(begin: 0.95, end: 1.0)
+            .animate(CurvedAnimation(parent: animation, curve: curve));
+
+        return SlideTransition(
+          position: slideAnimation,
+          child: FadeTransition(
+            opacity: fadeAnimation,
+            child: ScaleTransition(
+              scale: scaleAnimation,
+              child: child,
+            ),
           ),
         );
       },

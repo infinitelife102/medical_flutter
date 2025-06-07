@@ -3,6 +3,7 @@ import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:formatted_text/formatted_text.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:avatar_glow/avatar_glow.dart';
@@ -108,9 +109,7 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
         _transcribedText = 'Error: $e';
         _isProcessing = false;
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to send message: $e')),
-      );
+      customSnackBar(context, 'Failed to send message');
     }
   }
 
@@ -201,9 +200,7 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
             setState(() {
               _isProcessing = false;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Error: ${state.message}')),
-            );
+            customSnackBar(context, 'Error: ${state.message}');
           }
         },
         builder: (context, state) {
@@ -214,7 +211,13 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
               children: [
                 Card(
                   color: ColorManager.green,
-                  elevation: 0,
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(16),
+                        bottomRight: Radius.circular(16),
+                        topLeft: Radius.circular(16)),
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -224,13 +227,14 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
                           'Your Question:',
                           style: context.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
+                            color: ColorManager.white,
                           ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           _transcribedText,
                           style: context.textTheme.bodySmall
-                              ?.copyWith(color: ColorManager.black),
+                              ?.copyWith(color: ColorManager.white),
                           textAlign:
                               _isArabic ? TextAlign.right : TextAlign.left,
                           textDirection:
@@ -280,6 +284,12 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
     if (_isProcessing || state is ChatReceiverLoading) {
       return Card(
         color: ColorManager.grey.withOpacity(0.25),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+              bottomLeft: Radius.circular(16)),
+        ),
         elevation: 0,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -341,6 +351,12 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
       return Card(
         color: ColorManager.grey.withOpacity(0.25),
         elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+              bottomLeft: Radius.circular(16)),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -372,10 +388,11 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
               const SizedBox(height: 8),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Text(
+                  child: FormattedText(
                     _responseText,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: ColorManager.darkGrey,
+                      fontSize: 16.sp,
                     ),
                     textAlign: _isArabic ? TextAlign.right : TextAlign.left,
                     textDirection:
