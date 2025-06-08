@@ -139,6 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _navigateToVoiceScreen() {
+    FocusScope.of(context).unfocus();
     Navigator.pushNamed(
       context,
       RouteManager.voice,

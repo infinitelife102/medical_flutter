@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../data/model/chat_message_model.dart';
 import '../../data/service/api/ai_webservices.dart';
+import '../../utils/constant/ai_content.dart';
+
 part 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
@@ -39,11 +42,17 @@ class ChatCubit extends Cubit<ChatState> {
   void startListeningToMessages() {
     try {
       List<ChatMessageModel> messages =
-          _messagesBox?.values.toList().reversed.toList() ?? [];
+          _messagesBox?.values
+              .toList()
+              .reversed
+              .toList() ?? [];
       emit(ChatReceiveSuccess(response: messages));
       _messagesBox?.watch().listen((event) {
         List<ChatMessageModel> updatedMessages =
-            _messagesBox?.values.toList().reversed.toList() ?? [];
+            _messagesBox?.values
+                .toList()
+                .reversed
+                .toList() ?? [];
         emit(ChatReceiveSuccess(response: updatedMessages));
       });
     } on HiveError catch (err) {
@@ -64,7 +73,16 @@ class ChatCubit extends Cubit<ChatState> {
       await Future.delayed(const Duration(milliseconds: 350));
 
       emit(ChatReceiverLoading());
-      final response = await GenerativeAiWebService.postData(text: message);
+
+      final List<Content> content = [
+        ...AiConstantsContent.content,
+        ...(_messagesBox?.values
+            .toList()
+            .map((msg) => Content.text(msg.message))
+            .toList() ??
+            []),
+      ];
+      final response = await GenerativeAiWebService.postData(content: content);
       log(response.toString());
       await _messagesBox?.add(ChatMessageModel(
         isUser: false,
@@ -77,12 +95,9 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  // This method is specifically designed for the voice chat feature
-  // It sends a message and waits for the response before completing
   Future<void> sendMessageAndWaitForResponse({required String message}) async {
     emit(ChatSenderLoading());
     try {
-      // Add user's message to chat history
       final chatMessageModel = ChatMessageModel(
         isUser: true,
         message: message.trim(),
@@ -90,22 +105,29 @@ class ChatCubit extends Cubit<ChatState> {
       );
       await _messagesBox?.add(chatMessageModel);
       emit(ChatSendSuccess());
-
-      // Get response from AI
+      final List<Content> content = [
+        ...AiConstantsContent.content,
+        ...(_messagesBox?.values
+            .toList()
+            .map((msg) => Content.text(msg.message))
+            .toList() ??
+            []),
+      ];
       emit(ChatReceiverLoading());
-      final response = await GenerativeAiWebService.postData(text: message);
+      final response = await GenerativeAiWebService.postData(content: content);
       log(response.toString());
 
-      // Add AI response to chat history
       await _messagesBox?.add(ChatMessageModel(
         isUser: false,
         message: response ?? "ERROR",
         timeTamp: dateTimeFormatter(),
       ));
 
-      // Emit updated messages to update UI
       List<ChatMessageModel> messages =
-          _messagesBox?.values.toList().reversed.toList() ?? [];
+          _messagesBox?.values
+              .toList()
+              .reversed
+              .toList() ?? [];
       emit(ChatReceiveSuccess(response: messages));
     } on HiveError catch (err) {
       emit(ChatFailure(message: err.message.toString()));

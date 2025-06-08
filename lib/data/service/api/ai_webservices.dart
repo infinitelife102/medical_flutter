@@ -8,9 +8,9 @@ class GenerativeAiWebService {
     model: ApiUrlManager.generativeModelVersion,
     apiKey: ApiUrlManager.generativeModelApiKey,
   );
-  static Future<String?> postData({required String text}) async {
+
+  static Future<String?> postData({required List<Content> content}) async {
     try {
-      final content = [Content.text(text)];
       final response = await _model.generateContent(content);
       log("Data posted successfully!");
 

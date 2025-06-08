@@ -46,7 +46,7 @@ class _VoiceChatScreenState extends State<VoiceChatScreen> {
   Future<void> _initTts() async {
     await _flutterTts.setLanguage(_getTextToSpeechLanguage());
     await _flutterTts.setPitch(1.0);
-    await _flutterTts.setSpeechRate(0.5);
+    await _flutterTts.setSpeechRate(_isArabic ? 0.8 : 0.65);
     _flutterTts.setCompletionHandler(() {
       setState(() {
         _isSpeaking = false;
