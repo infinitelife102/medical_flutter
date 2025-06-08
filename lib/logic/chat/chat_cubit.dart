@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../data/model/chat_message_model.dart';
-import '../../data/service/api/google_generative_ai.dart';
+import '../../data/service/api/ai_webservices.dart';
 part 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {

@@ -1,14 +1,12 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 
+import '../../../utils/constant/api_url.dart';
 import '../../model/medical_tips_model.dart';
 
 class MedicalTipsService {
-  final String baseUrl = 'https://drai.pythonanywhere.com/api/daily-tip/';
-
   Future<MedicalTip> getDailyTip() async {
     try {
-      final response = await Dio().get(baseUrl);
+      final response = await Dio().get(ApiUrlManager.medicalTips);
 
       if (response.statusCode == 200) {
         return MedicalTip.fromJson(response.data);
