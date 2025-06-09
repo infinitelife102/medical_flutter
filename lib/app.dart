@@ -1,14 +1,14 @@
-import 'package:dr_ai/utils/constant/routes.dart';
-import 'package:dr_ai/logic/chat/chat_cubit.dart';
-import 'package:dr_ai/logic/validation/formvalidation_cubit.dart';
+import 'package:dr_ai/core/router/routes.dart';
+import 'package:dr_ai/controller/chat/chat_cubit.dart';
+import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'utils/constant/color.dart';
-import 'utils/helper/responsive.dart';
-import 'router/app_router.dart';
-import 'utils/theme/app_theme.dart';
-import 'logic/account/account_cubit.dart';
+import 'core/utils/theme/color.dart';
+import 'core/utils/helper/responsive.dart';
+import 'core/router/app_router.dart';
+import 'core/utils/theme/app_theme.dart';
+import 'controller/account/account_cubit.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

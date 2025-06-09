@@ -1,15 +1,15 @@
-import 'package:dr_ai/utils/constant/image.dart';
-import 'package:dr_ai/utils/constant/routes.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/constant/image.dart';
+import 'package:dr_ai/core/router/routes.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/medical_tip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../utils/constant/color.dart';
-import '../../../logic/chat/chat_cubit.dart';
-import '../../../logic/medical_tips/medical_tips_cubit.dart';
+import '../../../core/utils/theme/color.dart';
+import '../../../controller/chat/chat_cubit.dart';
+import '../../../controller/medical_tips/medical_tips_cubit.dart';
 import '../../widget/contact_card.dart';
 
 class HomeScreen extends StatelessWidget {

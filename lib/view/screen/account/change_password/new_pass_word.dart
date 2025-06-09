@@ -1,5 +1,5 @@
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/logic/validation/formvalidation_cubit.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:dr_ai/view/widget/custom_text_field.dart';
 import 'package:dr_ai/view/widget/my_stepper_form.dart';
@@ -9,10 +9,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../../utils/constant/color.dart';
-import '../../../../utils/helper/custom_dialog.dart';
-import '../../../../utils/helper/scaffold_snakbar.dart';
-import '../../../../logic/account/account_cubit.dart';
+import '../../../../core/utils/theme/color.dart';
+import '../../../../core/utils/helper/custom_dialog.dart';
+import '../../../../core/utils/helper/scaffold_snakbar.dart';
+import '../../../../controller/account/account_cubit.dart';
 import '../../../widget/custom_button.dart';
 
 class NewPasswordScreen extends StatefulWidget {

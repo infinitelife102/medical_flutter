@@ -1,5 +1,5 @@
-import 'package:dr_ai/utils/constant/image.dart';
-import 'package:dr_ai/utils/constant/routes.dart';
+import 'package:dr_ai/core/utils/constant/image.dart';
+import 'package:dr_ai/core/router/routes.dart';
 import 'package:dr_ai/view/screen/account/change_password/old_password_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

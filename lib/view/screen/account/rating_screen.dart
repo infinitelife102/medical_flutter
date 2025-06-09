@@ -1,7 +1,7 @@
-import 'package:dr_ai/cache/cache.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
-import 'package:dr_ai/logic/account/account_cubit.dart';
+import 'package:dr_ai/core/cache/cache.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/controller/account/account_cubit.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
-import '../../../utils/constant/color.dart';
-import '../../../utils/constant/image.dart';
+import '../../../core/utils/theme/color.dart';
+import '../../../core/utils/constant/image.dart';
 
 class RatingScreen extends StatefulWidget {
   const RatingScreen({super.key});

@@ -1,7 +1,7 @@
 import 'dart:developer';
-import 'package:dr_ai/utils/constant/color.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/core/utils/theme/color.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/custom_text_field.dart';
@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../logic/auth/forget_password/forget_password_cubit.dart';
-import '../../../logic/validation/formvalidation_cubit.dart';
+import '../../../controller/auth/forget_password/forget_password_cubit.dart';
+import '../../../controller/validation/formvalidation_cubit.dart';
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});

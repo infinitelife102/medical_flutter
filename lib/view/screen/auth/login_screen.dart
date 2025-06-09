@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:dr_ai/utils/constant/color.dart';
-import 'package:dr_ai/utils/constant/routes.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
-import 'package:dr_ai/logic/auth/sign_in/sign_in_cubit.dart';
+import 'package:dr_ai/core/utils/theme/color.dart';
+import 'package:dr_ai/core/router/routes.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/controller/auth/sign_in/sign_in_cubit.dart';
 import 'package:dr_ai/view/screen/auth/forget_password.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/custom_text_field.dart';
@@ -12,13 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../logic/chat/chat_cubit.dart';
-import '../../../logic/validation/formvalidation_cubit.dart';
+import '../../../controller/chat/chat_cubit.dart';
+import '../../../controller/validation/formvalidation_cubit.dart';
 import '../../widget/button_loading_indicator.dart';
-import '../../widget/custom_divider.dart';
 import '../../widget/custom_sign_up_button.dart';
 import '../../widget/custom_text_span.dart';
-import '../../widget/social_login_card.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

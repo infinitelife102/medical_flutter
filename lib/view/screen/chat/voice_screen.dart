@@ -1,5 +1,5 @@
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,8 +8,8 @@ import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:dr_ai/logic/chat/chat_cubit.dart';
-import 'package:dr_ai/utils/constant/color.dart';
+import 'package:dr_ai/controller/chat/chat_cubit.dart';
+import 'package:dr_ai/core/utils/theme/color.dart';
 
 class VoiceChatScreen extends StatefulWidget {
   const VoiceChatScreen({super.key});

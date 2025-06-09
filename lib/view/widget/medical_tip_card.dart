@@ -1,11 +1,11 @@
-import 'package:dr_ai/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../logic/medical_tips/medical_tips_cubit.dart';
-import '../../utils/constant/color.dart';
+import '../../controller/medical_tips/medical_tips_cubit.dart';
+import '../../core/utils/theme/color.dart';
 
 class MedicalTipCard extends StatefulWidget {
   const MedicalTipCard({

@@ -1,9 +1,9 @@
-import 'package:dr_ai/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../utils/constant/color.dart';
+import '../../core/utils/theme/color.dart';
 
 class BuildProfileCard extends StatelessWidget {
   const BuildProfileCard({

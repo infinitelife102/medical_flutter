@@ -1,12 +1,12 @@
-import 'package:dr_ai/utils/constant/color.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/logic/validation/formvalidation_cubit.dart';
+import 'package:dr_ai/core/utils/theme/color.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:formatted_text/formatted_text.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 
-import '../../utils/helper/scaffold_snakbar.dart';
+import '../../core/utils/helper/scaffold_snakbar.dart';
 
 class ChatBubbleForLoading extends StatelessWidget {
   const ChatBubbleForLoading({super.key});

@@ -1,14 +1,14 @@
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
-import 'package:dr_ai/logic/auth/sign_up/sign_up_cubit.dart';
-import 'package:dr_ai/logic/validation/formvalidation_cubit.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/controller/auth/sign_up/sign_up_cubit.dart';
+import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../utils/helper/custom_dialog.dart';
+import '../../../core/utils/helper/custom_dialog.dart';
 import '../../widget/black_button.dart';
 import '../../widget/custom_button.dart';
 import '../../widget/custom_drop_down_field.dart';

@@ -1,11 +1,11 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:dr_ai/utils/constant/color.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/location.dart';
+import 'package:dr_ai/core/utils/theme/color.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/location.dart';
 import 'package:dr_ai/data/model/place_directions.dart';
 import 'package:dr_ai/data/model/place_location.dart';
-import 'package:dr_ai/logic/validation/formvalidation_cubit.dart';
+import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/custom_tooltip.dart';
@@ -18,10 +18,9 @@ import 'package:gap/gap.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uuid/uuid.dart';
-import '../../../utils/helper/scaffold_snakbar.dart';
+import '../../../core/utils/helper/scaffold_snakbar.dart';
 import '../../../data/model/find_hospital_place_info.dart';
-import '../../../logic/maps/maps_cubit.dart';
-// Empty commit
+import '../../../controller/maps/maps_cubit.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});

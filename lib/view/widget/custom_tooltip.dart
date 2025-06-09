@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../utils/constant/color.dart';
+import '../../core/utils/theme/color.dart';
 
 class CustomToolTip extends StatelessWidget {
   const CustomToolTip(

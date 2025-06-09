@@ -1,16 +1,16 @@
-import 'package:dr_ai/utils/constant/image.dart';
-import 'package:dr_ai/utils/constant/routes.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
-import 'package:dr_ai/logic/auth/log_out/log_out_cubit.dart';
+import 'package:dr_ai/core/utils/constant/image.dart';
+import 'package:dr_ai/core/router/routes.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/controller/auth/log_out/log_out_cubit.dart';
 import 'package:dr_ai/view/widget/loading_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../utils/constant/color.dart';
-import '../../logic/chat/chat_cubit.dart';
+import '../../core/utils/theme/color.dart';
+import '../../controller/chat/chat_cubit.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,7 +1,7 @@
-import 'package:dr_ai/cache/cache.dart';
-import 'package:dr_ai/utils/helper/extention.dart';
-import 'package:dr_ai/utils/helper/scaffold_snakbar.dart';
-import 'package:dr_ai/logic/account/account_cubit.dart';
+import 'package:dr_ai/core/cache/cache.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/controller/account/account_cubit.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/custom_text_field.dart';
@@ -10,8 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
-import '../../../utils/constant/color.dart';
-import '../../../logic/validation/formvalidation_cubit.dart';
+import '../../../core/utils/theme/color.dart';
+import '../../../controller/validation/formvalidation_cubit.dart';
 
 void showEditProfileBottomSheet(
   BuildContext context,

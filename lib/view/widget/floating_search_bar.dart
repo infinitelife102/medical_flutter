@@ -1,13 +1,13 @@
-import 'package:dr_ai/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:dr_ai/data/model/place_suggetion.dart';
-import 'package:dr_ai/logic/maps/maps_cubit.dart';
+import 'package:dr_ai/controller/maps/maps_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../utils/constant/color.dart';
+import '../../core/utils/theme/color.dart';
 
 class MyFloatingSearchBar extends StatefulWidget {
   const MyFloatingSearchBar({

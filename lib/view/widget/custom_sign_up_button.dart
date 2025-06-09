@@ -1,6 +1,6 @@
-import 'package:dr_ai/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:flutter/material.dart';
-import '../../utils/constant/color.dart';
+import '../../core/utils/theme/color.dart';
 
 class SignUpButton extends StatelessWidget {
   const SignUpButton({
