@@ -30,38 +30,38 @@ class AppRouter {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteManager.initialRoute:
-        return PageTransitionManager.fadeTransition(BlocProvider(
+        return CustomPageTransitions.fade(BlocProvider(
           create: (context) => LogOutCubit(),
           child: const SplashScreen(),
         ));
       case RouteManager.login:
-        return PageTransitionManager.materialPageRoute(BlocProvider(
+        return CustomPageTransitions.fade(BlocProvider(
           create: (context) => SignInCubit(),
           child: const LoginScreen(),
         ));
       case RouteManager.home:
-        return PageTransitionManager.materialPageRoute(
+        return CustomPageTransitions.fadeForwards(
           const HomeScreen(),
         );
       case RouteManager.email:
-        return PageTransitionManager.materialPageRoute(BlocProvider(
+        return CustomPageTransitions.fadeForwards(BlocProvider(
           create: (context) => SignUpCubit(),
           child: const EmailScreen(),
         ));
       case RouteManager.password:
         String userEmail = settings.arguments as String;
-        return PageTransitionManager.fadeTransition(BlocProvider(
+        return CustomPageTransitions.fadeForwards(BlocProvider(
           create: (context) => SignUpCubit(),
           child: PasswordScreen(email: userEmail),
         ));
       case RouteManager.information:
         List<String?> userCredential = settings.arguments as List<String?>;
-        return PageTransitionManager.fadeTransition(BlocProvider(
+        return CustomPageTransitions.fadeForwards(BlocProvider(
           create: (context) => SignUpCubit(),
           child: CreateProfile(userCredential: userCredential),
         ));
       case RouteManager.nav:
-        return PageTransitionManager.materialPageRoute(MultiBlocProvider(
+        return CustomPageTransitions.fadeForwards(MultiBlocProvider(
           providers: [
             BlocProvider(
               create: (context) => MapsCubit(),
@@ -73,41 +73,40 @@ class AppRouter {
           child: const NavbarScreen(),
         ));
       case RouteManager.chat:
-        return PageTransitionManager.materialPageRoute(
+        return CustomPageTransitions.fadeForwards(
           const ChatScreen(),
         );
       case RouteManager.voice:
-        return PageTransitionManager.materialBottomToTopTransition(
+        return CustomPageTransitions.openUpwards(
           const VoiceChatScreen(),
         );
       case RouteManager.editProfile:
-        return PageTransitionManager.materialSlideTransition(
+        return CustomPageTransitions.fadeForwards(
           const EditProfileScreen(),
         );
       case RouteManager.oldPassword:
-        return PageTransitionManager.materialSlideTransition(
+        return CustomPageTransitions.fadeForwards(
           const OldPasswordScreen(),
         );
       case RouteManager.newPassword:
-        return PageTransitionManager.fadeTransition(
+        return CustomPageTransitions.fadeForwards(
           const NewPasswordScreen(),
         );
       case RouteManager.aboutUs:
-        return PageTransitionManager.materialSlideTransition(
+        return CustomPageTransitions.fadeForwards(
           const AboutUsScreen(),
         );
       case RouteManager.maps:
-        return PageTransitionManager.fadeTransition(BlocProvider(
+        return CustomPageTransitions.fadeForwards(BlocProvider(
           create: (context) => MapsCubit(),
           child: const MapScreen(),
         ));
       case RouteManager.reAuthScreen:
-        return PageTransitionManager.materialSlideTransition(
+        return CustomPageTransitions.fadeForwards(
           const ReAuthScreen(),
         );
       case RouteManager.deleteAccount:
-        return PageTransitionManager.fadeTransition(
-            const DeleteAccountScreen());
+        return CustomPageTransitions.fadeForwards(const DeleteAccountScreen());
       default:
         return null;
     }
