@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:uuid/uuid.dart';
+import 'dart:async';
 
 import '../../core/utils/theme/color.dart';
 
@@ -22,11 +23,30 @@ class MyFloatingSearchBarState extends State<MyFloatingSearchBar> {
   FloatingSearchBarController searchBarController =
       FloatingSearchBarController();
 
+  Timer? _debounceTimer;
+  final Duration _debounceDuration = const Duration(milliseconds: 800);
+
   void Function(String)? onQueryChanged(query) {
-    final sessionToken = const Uuid().v4();
-    context.bloc<MapsCubit>().getPlaceSuggetions(
-        place: query.toString().trim(), sessionToken: sessionToken);
+    if (_debounceTimer?.isActive ?? false) {
+      _debounceTimer!.cancel();
+    }
+
+    if (query.toString().trim().isNotEmpty) {
+      _debounceTimer = Timer(_debounceDuration, () {
+        final sessionToken = const Uuid().v4();
+        context.bloc<MapsCubit>().getPlaceSuggetions(
+            place: query.toString().trim(), sessionToken: sessionToken);
+      });
+    }
     return null;
+  }
+
+  @override
+  void dispose() {
+
+    _debounceTimer?.cancel();
+    searchBarController.dispose();
+    super.dispose();
   }
 
   List<PlaceSuggestionModel> _placeSuggestionList = [];
