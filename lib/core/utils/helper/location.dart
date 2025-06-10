@@ -1,48 +1,48 @@
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'dart:developer';
 import 'scaffold_snakbar.dart';
 
 class LocationHelper {
-  static Future<Position?> determineCurrentPosition(context) async {
+  static final Location _location = Location();
+
+  static Future<LocationData?> determineCurrentPosition(context) async {
     bool serviceEnabled;
-    LocationPermission permission;
+    PermissionStatus permissionStatus;
 
     //* Check if location services are enabled
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await _location.serviceEnabled();
     if (!serviceEnabled) {
-      log('Location services are disabled.');
-      customSnackBar(context, "Location services are disabled.");
-    }
-
-    //* Check for location permissions
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        log('Location permissions are denied.');
-        customSnackBar(context, "Location permissions are denied.");
+      serviceEnabled = await _location.requestService();
+      if (!serviceEnabled) {
+        log('Location services are disabled.');
+        customSnackBar(context, "Location services are disabled.");
+        return null;
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
+    //* Check for location permissions
+    permissionStatus = await _location.hasPermission();
+    if (permissionStatus == PermissionStatus.denied) {
+      permissionStatus = await _location.requestPermission();
+      if (permissionStatus == PermissionStatus.denied) {
+        log('Location permissions are denied.');
+        customSnackBar(context, "Location permissions are denied.");
+        return null;
+      }
+    }
+
+    if (permissionStatus == PermissionStatus.deniedForever) {
       log('Location permissions are permanently denied.');
       customSnackBar(context, "Location permissions are permanently denied.");
+      return null;
     }
 
     //* Try to get the last known position first for faster feedback
-    Position? lastKnownPosition = await Geolocator.getLastKnownPosition();
-    if (lastKnownPosition != null) {
-      log('Using last known position: ${lastKnownPosition.latitude}, ${lastKnownPosition.longitude}');
-      return lastKnownPosition;
-    }
-
-    //* If no last known position is available, get the current position
+    LocationData? locationData;
     try {
-      Position currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      log('Current position: ${currentPosition.latitude}, ${currentPosition.longitude}');
-      return currentPosition;
+      locationData = await _location.getLocation();
+      log('Current position: ${locationData.latitude}, ${locationData.longitude}');
+      return locationData;
     } catch (err) {
       log('Error getting current position: $err');
       customSnackBar(context, "Error getting current position.");

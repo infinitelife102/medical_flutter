@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:developer' as log;
+import 'dart:math';
 import 'package:dr_ai/core/utils/theme/color.dart';
 import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:dr_ai/core/utils/helper/location.dart';
@@ -15,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/utils/helper/scaffold_snakbar.dart';
@@ -40,12 +41,15 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   late GlobalKey<ScaffoldState> _scaffoldKey;
+  final Location _location = Location();
 
   Future<void> _getCurrentLocation() async {
-    await LocationHelper.determineCurrentPosition(context);
-    _position = await Geolocator.getCurrentPosition().whenComplete(() async {
+    LocationData? locationData =
+        await LocationHelper.determineCurrentPosition(context);
+    if (locationData != null) {
+      _locationData = locationData;
       setState(() {});
-    });
+    }
   }
 
   Future<void> _goToSearchedPlaceLocation() async {
@@ -66,19 +70,20 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Completer<GoogleMapController> completerController = Completer();
-  static Position? _position;
-  static final CameraPosition _myCurrrentPositionCameraPosition =
-      CameraPosition(
-          bearing: 0,
-          target: LatLng(_position!.latitude, _position!.longitude),
-          tilt: 0.0,
-          zoom: 17);
+  static LocationData? _locationData;
+
+  static CameraPosition get _myCurrrentPositionCameraPosition => CameraPosition(
+      bearing: 0,
+      target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
+      tilt: 0.0,
+      zoom: 17);
 
   Set<Marker> _markers = {};
   late String? _placeSuggestion;
   late PlaceLocationModel _selectedPlace;
   late Marker _searchedPlaceMarker;
   late CameraPosition _goToSearchedForPlace;
+
   // Future<void> _loadCachedHospitals() async {
   //   List<Map<String, dynamic>> cachedData =
   //       CacheData.getListOfMaps(key: 'nearestHospitals');
@@ -92,6 +97,7 @@ class _MapScreenState extends State<MapScreen> {
 
   bool _isLoading = false;
   List<FindHospitalsPlaceInfo?> _hospitalList = [];
+
   // List<Map<String, dynamic>> _cachedHospitalList = [];
 
   @override
@@ -104,7 +110,7 @@ class _MapScreenState extends State<MapScreen> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            _position != null ? _buildMap() : _buildLoadingIndicator(),
+            _locationData != null ? _buildMap() : _buildLoadingIndicator(),
             _buildSelectedPlaceLocation(),
             _isSearchedPlaceMarkerClicked && _placeDirections != null
                 ? DistanceAndTime(
@@ -158,7 +164,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _buildCameraNewPosition() {
     _isSearchedPlaceMarkerClicked = false;
-    log("${_selectedPlace.lat}  ${_selectedPlace.lng}");
+    log.log("${_selectedPlace.lat}  ${_selectedPlace.lng}");
     _goToSearchedForPlace = CameraPosition(
       bearing: 0.0,
       tilt: 0.0,
@@ -181,7 +187,7 @@ class _MapScreenState extends State<MapScreen> {
           ? {
               // Marker(
               //   markerId: const MarkerId('currentLocation'),
-              //   position: LatLng(_position!.latitude, _position!.longitude),
+              //   position: LatLng(_locationData!.latitude!, _locationData!.longitude!),
               //   icon: BitmapDescriptor.defaultMarkerWithHue(
               //       BitmapDescriptor.hueGreen),
               //   infoWindow: const InfoWindow(
@@ -192,13 +198,13 @@ class _MapScreenState extends State<MapScreen> {
             }
           : _markers,
       initialCameraPosition: CameraPosition(
-        target: LatLng(_position!.latitude, _position!.longitude),
+        target: LatLng(_locationData!.latitude!, _locationData!.longitude!),
         zoom: 15.0,
       ),
       circles: {
         Circle(
           circleId: const CircleId("current_location"),
-          center: LatLng(_position!.latitude, _position!.longitude),
+          center: LatLng(_locationData!.latitude!, _locationData!.longitude!),
           radius: 70.r,
           fillColor: ColorManager.green.withOpacity(0.25),
           strokeColor: ColorManager.green.withOpacity(0.7),
@@ -230,11 +236,14 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Future<void> _goToMyCurrentLocation() async {
-    LocationHelper.determineCurrentPosition(context);
-    Geolocator.getCurrentPosition();
-    final GoogleMapController controller = await completerController.future;
-    controller.animateCamera(
-        CameraUpdate.newCameraPosition(_myCurrrentPositionCameraPosition));
+    LocationData? locationData =
+        await LocationHelper.determineCurrentPosition(context);
+    if (locationData != null) {
+      _locationData = locationData;
+      final GoogleMapController controller = await completerController.future;
+      controller.animateCamera(
+          CameraUpdate.newCameraPosition(_myCurrrentPositionCameraPosition));
+    }
   }
 
   Widget _buildSelectedPlaceLocation() {
@@ -245,7 +254,7 @@ class _MapScreenState extends State<MapScreen> {
           _placeDirections = null;
           setState(() {});
           _placeSuggestion = state.placeLocation[1];
-          log(_selectedPlace.toString());
+          log.log(_selectedPlace.toString());
           _goToMySearchedForLocation();
         }
       },
@@ -360,7 +369,7 @@ class _MapScreenState extends State<MapScreen> {
   /// call
   Future<void> _getDirections() async {
     await context.bloc<MapsCubit>().getPlaceDirections(
-          origin: LatLng(_position!.latitude, _position!.longitude),
+          origin: LatLng(_locationData!.latitude!, _locationData!.longitude!),
           destination: LatLng(_selectedPlace.lat, _selectedPlace.lng),
         );
     setState(() {});
@@ -396,11 +405,12 @@ class _MapScreenState extends State<MapScreen> {
 
     double nearestDistance = double.infinity;
     FindHospitalsPlaceInfo? nearestHospital;
-    LatLng currentPosition = LatLng(_position!.latitude, _position!.longitude);
+    LatLng currentPosition =
+        LatLng(_locationData!.latitude!, _locationData!.longitude!);
 
     for (var hospital in _hospitalList) {
       LatLng hospitalPosition = LatLng(hospital!.lat, hospital.lng);
-      double distance = Geolocator.distanceBetween(
+      double distance = _calculateDistance(
         currentPosition.latitude,
         currentPosition.longitude,
         hospitalPosition.latitude,
@@ -413,33 +423,12 @@ class _MapScreenState extends State<MapScreen> {
       }
     }
 
-    // for (var hospital in _cachedHospitalList) {
-    //   LatLng hospitalPosition = LatLng(hospital['lat'], hospital['lng']);
-    //   double distance = Geolocator.distanceBetween(
-    //     currentPosition.latitude,
-    //     currentPosition.longitude,
-    //     hospitalPosition.latitude,
-    //     hospitalPosition.longitude,
-    //   );
-
-    //   if (distance < nearestDistance) {
-    //     nearestDistance = distance;
-    //     nearestHospital = PlaceInfo(
-    //       placeId: hospital['placeId'],
-    //       lat: hospital['lat'],
-    //       lng: hospital['lng'],
-    //       name: hospital['name'],
-    //       openNow: hospital['openNow'],
-    //     );
-    //   }
-    // }
-
     _markers = {};
     for (var hospital in _hospitalList) {
       final marker = Marker(
         markerId: MarkerId(hospital!.placeId),
         position: LatLng(hospital.lat, hospital.lng),
-        infoWindow: InfoWindow(title: hospital.name), 
+        infoWindow: InfoWindow(title: hospital.name),
         onTap: () {
           _selectedPlace =
               PlaceLocationModel(lat: hospital.lat, lng: hospital.lng);
@@ -455,6 +444,29 @@ class _MapScreenState extends State<MapScreen> {
       );
       _markers.add(marker);
     }
+  }
+
+  // Haversine formula to calculate distance
+  double _calculateDistance(double startLatitude, double startLongitude,
+      double endLatitude, double endLongitude) {
+    const double earthRadius = 6371000; // in meters
+    double dLat = _degreesToRadians(endLatitude - startLatitude);
+    double dLon = _degreesToRadians(endLongitude - startLongitude);
+
+    double a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(_degreesToRadians(startLatitude)) *
+            cos(_degreesToRadians(endLatitude)) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
+
+    double c = 2 * atan2(sqrt(a), sqrt(1 - a));
+    double distance = earthRadius * c;
+
+    return distance;
+  }
+
+  double _degreesToRadians(double degrees) {
+    return degrees * (pi / 180);
   }
 
   Widget _buildDrawer() {

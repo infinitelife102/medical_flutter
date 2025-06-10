@@ -6,7 +6,7 @@ import 'package:dr_ai/data/model/place_directions.dart';
 import 'package:dr_ai/data/model/place_location.dart';
 import 'package:dr_ai/data/model/place_suggetion.dart';
 import 'package:dr_ai/data/source/remote/maps_place.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
 
@@ -19,7 +19,9 @@ class MapsCubit extends Cubit<MapsState> {
 
   double? lat;
   double? lng;
-  Position? _position;
+  LocationData? _locationData;
+  final Location _location = Location();
+
   //! Place suggetions.
   Future<void> getPlaceSuggetions({
     required String place,
@@ -27,10 +29,10 @@ class MapsCubit extends Cubit<MapsState> {
   }) async {
     emit(MapsLoading());
     try {
-      _position = await Geolocator.getCurrentPosition();
+      _locationData = await _location.getLocation();
       List<dynamic> response = await PlacesWebservices.fetchPlaceSuggestions(
           place.trim(), sessionToken,
-          latitude: _position!.latitude, longitude: _position!.longitude);
+          latitude: _locationData!.latitude!, longitude: _locationData!.longitude!);
 
       List<PlaceSuggestionModel> suggestionList = response
           .map((prediction) => PlaceSuggestionModel.fromJson(prediction))
@@ -101,12 +103,12 @@ class MapsCubit extends Cubit<MapsState> {
   Future<void> getNearestHospitals({double? radius}) async {
     try {
       emit(FindHospitalLoading());
-      _position ??= await Geolocator.getCurrentPosition();
+      _locationData ??= await _location.getLocation();
       log('Loading nearest hospitals...');
 
       final List<FindHospitalsPlaceInfo> hospitalsData =
           await FindHospitalWebService.getNearestHospital(
-              _position!.latitude, _position!.longitude, radius);
+              _locationData!.latitude!, _locationData!.longitude!, radius);
 
       if (hospitalsData.isEmpty) {
         emit(FindHospitalFailure(message: 'No hospitals found.'));
