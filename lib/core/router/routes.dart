@@ -18,4 +18,6 @@ class RouteManager {
   static const aboutUs = "/aboutUs";
   static const reAuthScreen = "/reAuthScreen";
   static const deleteAccount = "/deleteAccount";
+  static const termsAndConditions = "/termsAndConditions";
+  static const privacyPolicy = "/privacyPolicy";
 }

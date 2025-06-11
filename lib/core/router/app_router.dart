@@ -1,3 +1,5 @@
+import '../../view/screen/account/privacy_policy.dart';
+import '../../view/screen/account/terms_and_conditions.dart';
 import 'routes.dart';
 import '../../controller/auth/log_out/log_out_cubit.dart';
 import '../../view/screen/account/delete_account/delete_account_screen.dart';
@@ -31,12 +33,12 @@ class AppRouter {
     switch (settings.name) {
       case RouteManager.initialRoute:
         return PageTransitionManager.fadeTransition(BlocProvider(
-          create: (context) => LogOutCubit(),
+          create: (_) => LogOutCubit(),
           child: const SplashScreen(),
         ));
       case RouteManager.login:
         return PageTransitionManager.materialPageRoute(BlocProvider(
-          create: (context) => SignInCubit(),
+          create: (_) => SignInCubit(),
           child: const LoginScreen(),
         ));
       case RouteManager.home:
@@ -45,29 +47,29 @@ class AppRouter {
         );
       case RouteManager.email:
         return PageTransitionManager.materialPageRoute(BlocProvider(
-          create: (context) => SignUpCubit(),
+          create: (_) => SignUpCubit(),
           child: const EmailScreen(),
         ));
       case RouteManager.password:
         String userEmail = settings.arguments as String;
         return PageTransitionManager.fadeTransition(BlocProvider(
-          create: (context) => SignUpCubit(),
+          create: (_) => SignUpCubit(),
           child: PasswordScreen(email: userEmail),
         ));
       case RouteManager.information:
         List<String?> userCredential = settings.arguments as List<String?>;
         return PageTransitionManager.fadeTransition(BlocProvider(
-          create: (context) => SignUpCubit(),
+          create: (_) => SignUpCubit(),
           child: CreateProfile(userCredential: userCredential),
         ));
       case RouteManager.nav:
         return PageTransitionManager.materialPageRoute(MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (context) => MapsCubit(),
+              create: (_) => MapsCubit(),
             ),
             BlocProvider(
-              create: (context) => LaunchUriCubit(),
+              create: (_) => LaunchUriCubit(),
             ),
           ],
           child: const NavbarScreen(),
@@ -98,7 +100,7 @@ class AppRouter {
         );
       case RouteManager.maps:
         return PageTransitionManager.fadeTransition(BlocProvider(
-          create: (context) => MapsCubit(),
+          create: (_) => MapsCubit(),
           child: const MapScreen(),
         ));
       case RouteManager.reAuthScreen:
@@ -108,6 +110,18 @@ class AppRouter {
       case RouteManager.deleteAccount:
         return PageTransitionManager.fadeTransition(
             const DeleteAccountScreen());
+      case RouteManager.termsAndConditions:
+        return PageTransitionManager.materialSlideTransition(
+          BlocProvider(
+              create: (_) => LaunchUriCubit(),
+              child: const TermsAndConditionsScreen()),
+        );
+      case RouteManager.privacyPolicy:
+        return PageTransitionManager.materialSlideTransition(
+          BlocProvider(
+              create: (_) => LaunchUriCubit(),
+              child: const PrivacyPolicyScreen()),
+        );
       default:
         return null;
     }
