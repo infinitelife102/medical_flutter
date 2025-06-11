@@ -20,6 +20,7 @@ class CustomDropDownField extends StatefulWidget {
     this.validator,
     this.hintText,
     this.onSaved,
+    this.value,
   });
   final String title;
   final List<Item> items;
@@ -27,6 +28,7 @@ class CustomDropDownField extends StatefulWidget {
   final FormFieldValidator<Item>? validator;
   final Function(Item?)? onSaved;
   final String? hintText;
+  final Item? value;
 
   @override
   CustomDropDownFieldState createState() => CustomDropDownFieldState();
@@ -34,6 +36,23 @@ class CustomDropDownField extends StatefulWidget {
 
 class CustomDropDownFieldState extends State<CustomDropDownField> {
   Item? selectedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedUser = widget.value;
+  }
+
+  @override
+  void didUpdateWidget(CustomDropDownField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      setState(() {
+        selectedUser = widget.value;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

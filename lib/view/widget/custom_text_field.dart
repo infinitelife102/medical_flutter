@@ -22,7 +22,11 @@ class CustomTextFormField extends StatefulWidget {
     this.cursorColor,
     this.obscureText,
     this.initialValue,
+    this.maxLines,
+    this.closeWhenTapOutside,
   });
+
+  final bool? closeWhenTapOutside;
   final String? hintText;
   final String? label;
   final FormFieldSetter<String>? onSaved;
@@ -39,6 +43,8 @@ class CustomTextFormField extends StatefulWidget {
   final Color? cursorColor;
   final bool? obscureText;
   final String? initialValue;
+  final int? maxLines;
+
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
 }
@@ -46,6 +52,7 @@ class CustomTextFormField extends StatefulWidget {
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
   bool isTap = false;
   bool isObscure = true;
+
   @override
   Widget build(BuildContext context) {
     return Column(children: [
@@ -82,8 +89,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         },
         onTapOutside: (_) {
           isTap = false;
+          if (widget.closeWhenTapOutside == true) {
+            FocusScope.of(context).unfocus();
+          }
           setState(() {});
         },
+        maxLines: widget.maxLines ?? 1,
         decoration: InputDecoration(
           isCollapsed: true,
           isDense: true,

@@ -11,6 +11,7 @@ import 'package:gap/gap.dart';
 import '../../../core/cache/cache.dart';
 import '../../../core/utils/theme/color.dart';
 import '../../../controller/validation/formvalidation_cubit.dart';
+import '../../widget/custom_drop_down_field.dart';
 import '../../widget/custom_scrollable_appbar.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -32,15 +33,34 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? _height;
   String? _weight;
   String? _chronicDiseases;
+  List<Item> genderList = const [
+    Item("Male", Icons.male),
+    Item("Female", Icons.female),
+  ];
+  List<Item> bloodTypesList = const [
+    Item('A+'),
+    Item('A-'),
+    Item('B+'),
+    Item('B-'),
+    Item('AB+'),
+    Item('AB-'),
+    Item('O+'),
+    Item('O-'),
+    Item('Unknown'),
+  ];
+
   String? _familyHistoryOfChronicDiseases;
   final Map<String, dynamic> _userData = CacheData.getMapData(key: "userData");
   bool _isloading = false;
+
   void _updateUserData() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       if (_name == _userData['name'] &&
           _phoneNumber == _userData['phoneNumber'] &&
           _dob == _userData['dob'] &&
+          _gender == _userData['gender'] &&
+          _bloodType == _userData['bloodType'] &&
           _height == _userData['height'] &&
           _weight == _userData['weight'] &&
           _chronicDiseases == _userData['chronicDiseases'] &&
@@ -55,6 +75,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               email: _email ?? _userData['email'],
               phoneNumber: _phoneNumber ?? _userData['phoneNumber'],
               dob: _dob ?? _userData['dob'],
+              gender: _gender ?? _userData['gender'],
+              bloodType: _bloodType ?? _userData['bloodType'],
               height: _height ?? _userData['height'],
               weight: _weight ?? _userData['weight'],
               chronicDiseases: _chronicDiseases ?? _userData['chronicDiseases'],
@@ -207,29 +229,63 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             },
             validator: cubit.validateDateOfBirth,
           ),
-          CustomTextFormField(
-            initialValue: userData['height'],
-            keyboardType: TextInputType.number,
-            title: "Height ( CM )",
-            hintText: "Enter your height",
+          CustomDropDownField(
+            hintText: "Enter your Gender",
+            title: "Gender",
+            items: genderList,
+            value: genderList.firstWhere(
+              (item) => item.name == userData['gender'],
+              orElse: () => genderList.first,
+            ),
             onSaved: (data) {
-              _height = data!;
+              _gender = data!.name.toString();
             },
-            validator: cubit.heightValidator,
+          ),
+          CustomDropDownField(
+              hintText: "Enter your Blood Type",
+              title: "Blood Type",
+              items: bloodTypesList,
+              value: bloodTypesList.firstWhere(
+                (item) => item.name == userData['bloodType'],
+                orElse: () => bloodTypesList.last, // Default to 'Unknown'
+              ),
+              onSaved: (data) {
+                _bloodType = data!.name.toString();
+              }),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  initialValue: userData['height'],
+                  keyboardType: TextInputType.number,
+                  title: "Height ( CM )",
+                  hintText: "Enter your height",
+                  onSaved: (data) {
+                    _height = data!;
+                  },
+                  validator: cubit.heightValidator,
+                ),
+              ),
+              Gap(18),
+              Expanded(
+                child: CustomTextFormField(
+                  initialValue: userData['weight'],
+                  keyboardType: TextInputType.number,
+                  title: "Weight ( KG )",
+                  hintText: "Enter your weight",
+                  onSaved: (data) {
+                    _weight = data!;
+                  },
+                  validator: cubit.weightValidator,
+                ),
+              ),
+            ],
           ),
           CustomTextFormField(
-            initialValue: userData['weight'],
-            keyboardType: TextInputType.number,
-            title: "Weight ( KG )",
-            hintText: "Enter your weight",
-            onSaved: (data) {
-              _weight = data!;
-            },
-            validator: cubit.weightValidator,
-          ),
-          CustomTextFormField(
+            maxLines: 4,
+            closeWhenTapOutside: true,
             initialValue: userData['chronicDiseases'],
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.multiline,
             title: "chronic diseases",
             hintText: "Enter your chronic diseases",
             onSaved: (data) {
@@ -237,8 +293,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             },
           ),
           CustomTextFormField(
+            maxLines: 4,
+            closeWhenTapOutside: true,
             initialValue: userData['familyHistoryOfChronicDiseases'],
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.multiline,
             title: "Family history of chronic diseases",
             hintText: "Enter your Family history of chronic diseases",
             onSaved: (data) {
