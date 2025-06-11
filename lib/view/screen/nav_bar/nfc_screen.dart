@@ -64,7 +64,7 @@ class _NFCScreenState extends State<NFCScreen> {
       );
 
     final initialUrl =
-        'https://rj8vq174-5173.uks1.devtunnels.ms/record/a18a2476-942d-423e-9a04-14443705db60';
+        'https://rj8vq174-5173.uks1.devtunnels.ms/record/a18a2476942d423e9a0414443705db60';
     _controller.loadRequest(Uri.parse(initialUrl));
   }
 

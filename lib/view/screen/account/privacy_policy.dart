@@ -127,7 +127,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
             _buildSectionHeader('8. Contact Information'),
             _buildParagraph(
                 'If you have any questions about this Privacy Policy, please contact us at:'),
-            _buildEmailLink(context, 'mahmoudelsayed.test@gmail.com'),
+            _buildEmailLink(context, 'draibrain.team@gmail.com'),
             Gap(32.h),
           ],
         ),
@@ -266,23 +266,36 @@ class PrivacyPolicyScreen extends StatelessWidget {
       listener: (context, state) {},
       child: Padding(
         padding: EdgeInsets.only(bottom: 12.h),
-        child: InkWell(
-          onTap: () => context.read<LaunchUriCubit>().openEmailApp(
-                email: email,
-                subject: 'Privacy Policy Inquiry',
-                body: 'I have a question regarding the privacy policy.',
+        child: Wrap(
+          children: [
+            Text(
+              'Email: ',
+              style: TextStyle(
+                fontFamily: FontFamilyManager.poppins,
+                fontSize: 14.sp,
+                color: ColorManager.dark,
+                height: 1.5,
               ),
-          child: Text(
-            'Email: $email',
-            style: TextStyle(
-              fontFamily: FontFamilyManager.poppins,
-              fontSize: 14.sp,
-              color: Colors.blue,
-              height: 1.5,
-              decoration: TextDecoration.underline,
-              decorationColor: Colors.blue,
             ),
-          ),
+            InkWell(
+              onTap: () => context.read<LaunchUriCubit>().openEmailApp(
+                    email: email,
+                    subject: 'Privacy Policy Inquiry',
+                    body: 'I have a question regarding the privacy policy.',
+                  ),
+              child: Text(
+                email,
+                style: TextStyle(
+                  fontFamily: FontFamilyManager.poppins,
+                  fontSize: 14.sp,
+                  color: Colors.blue,
+                  height: 1.5,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Colors.blue,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
