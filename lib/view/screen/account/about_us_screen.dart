@@ -36,22 +36,12 @@ class AboutUsScreen extends StatelessWidget {
                     onPressed: () {}),
                 divider,
                 BuildProfileCard(
-                    title: "Terms of use",
-                    image: ImageManager.termsIcon,
-                    onPressed: () {}),
-                divider,
-                BuildProfileCard(
-                    title: "Privacy policy",
-                    image: ImageManager.privacyPolicyIcon,
-                    onPressed: () {}),
-                divider,
-                BuildProfileCard(
                     title: "Social Media",
                     image: ImageManager.socialMediaIcon,
                     onPressed: () {}),
                 divider,
                 BuildProfileCard(
-                  removeColorIcon: true,
+                    removeColorIcon: true,
                     title: "Support",
                     image: ImageManager.splashLogo,
                     onPressed: () {}),

@@ -30,6 +30,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   UserDataModel? _userData;
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.bloc<AccountCubit>();
@@ -80,6 +81,18 @@ class _AccountScreenState extends State<AccountScreen> {
                     onPressed: () =>
                         Navigator.pushNamed(context, RouteManager.oldPassword),
                   ),
+                  divider,
+                  BuildProfileCard(
+                      title: "Terms & Conditions",
+                      image: ImageManager.termsIcon,
+                      onPressed: () => Navigator.pushNamed(
+                          context, RouteManager.termsAndConditions)),
+                  divider,
+                  BuildProfileCard(
+                      title: "Privacy policy",
+                      image: ImageManager.privacyPolicyIcon,
+                      onPressed: () => Navigator.pushNamed(
+                          context, RouteManager.privacyPolicy)),
                   divider,
                   BuildProfileCard(
                     title: "About Us",

@@ -24,4 +24,33 @@ class LaunchUriCubit extends Cubit<LaunchUriState> {
       Future.error(Exception("Failed to open contacts app: $err"));
     }
   }
+
+  Future<void> openEmailApp({
+    required String email,
+    String? subject,
+    String? body,
+  }) async {
+    try {
+      String mailtoUrl = 'mailto:$email';
+
+      List<String> queryParams = [];
+      if (subject != null) {
+        queryParams.add('subject=${Uri.encodeComponent(subject)}');
+      }
+      if (body != null) {
+        queryParams.add('body=${Uri.encodeComponent(body)}');
+      }
+
+      if (queryParams.isNotEmpty) {
+        mailtoUrl += '?${queryParams.join('&')}';
+      }
+
+      final Uri launchUri = Uri.parse(mailtoUrl);
+      await launchUrl(launchUri);
+      emit(LaunchUriState.launchOpen);
+    } catch (err) {
+      emit(LaunchUriState.launchFailure);
+      Future.error(Exception("Failed to open email app: $err"));
+    }
+  }
 }
