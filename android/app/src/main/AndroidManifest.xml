@@ -1,15 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="Dr Ai"
+        android:label="Dr AI"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true"
         android:enableOnBackInvokedCallback="true">
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAk44ARDYlyxejknsj1k55m2N5o6aPY2Ws" />
+            android:value="" />
         <meta-data
             android:name="com.google.android.gms.applicationId"
-            android:value="YOUR_GOOGLE_APP_ID" />       
+            android:value="YOUR_GOOGLE_APP_ID" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -17,6 +17,7 @@
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <!-- Theme meta-data -->
             <meta-data
@@ -67,6 +68,11 @@
         </intent>
         <intent>
             <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <!-- Email support check -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="mailto" />
         </intent>
     </queries>
 </manifest>
