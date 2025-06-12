@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 import 'package:dr_ai/core/router/routes.dart';
 import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
@@ -15,8 +14,6 @@ import '../../../core/utils/theme/color.dart';
 import '../../../core/utils/helper/custom_dialog.dart';
 import '../../../core/utils/helper/extention.dart';
 import '../../../core/utils/constant/image.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -26,23 +23,17 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  bool _speechEnabled = false;
-  String _lastWords = '';
   bool _isSenderLoading = false;
   bool _isReceiverLoading = false;
   bool _isChatDeletingLoading = false;
   bool _isButtonVisible = false;
   List<ChatMessageModel> _chatMessageModel = [];
-  final stt.SpeechToText _speechToText = stt.SpeechToText();
   late TextEditingController _txtController;
   late ScrollController _scrollController;
-  Timer? _noInputTimer;
-  final Duration _noInputDuration = const Duration(seconds: 5);
 
   @override
   void initState() {
     super.initState();
-    _initSpeech();
     _getMessages();
     _txtController = TextEditingController();
     _scrollController = ScrollController();
@@ -67,58 +58,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     _txtController.dispose();
-    _noInputTimer?.cancel();
     super.dispose();
   }
 
-  Future<void> _initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
-
-  Future<void> _startListening() async {
-    await _speechToText.listen(
-      onResult: _onSpeechResult,
-      partialResults: true,
-      onSoundLevelChange: null,
-      cancelOnError: true,
-      localeId: 'ar-EG',
-      listenMode: stt.ListenMode.dictation,
-    );
-    _startNoInputTimer();
-    setState(() {});
-  }
-
-  Future<void> _stopListening() async {
-    await _speechToText.stop();
-    _cancelNoInputTimer();
-    setState(() {});
-  }
-
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _lastWords = result.recognizedWords;
-      _txtController.text = _lastWords;
-      _txtController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _txtController.text.length),
-      );
-    });
-    _resetNoInputTimer();
-    log(result.recognizedWords);
-  }
-
-  void _startNoInputTimer() {
-    _noInputTimer = Timer(_noInputDuration, _stopListening);
-  }
-
-  void _resetNoInputTimer() {
-    _noInputTimer?.cancel();
-    _startNoInputTimer();
-  }
-
-  void _cancelNoInputTimer() {
-    _noInputTimer?.cancel();
-  }
 
   void _sendMessage() {
     _txtController.text.trim();
