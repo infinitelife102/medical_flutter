@@ -1,3 +1,5 @@
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -62,14 +64,12 @@ class _NFCScreenState extends State<NFCScreen> {
             });
           },
           onWebResourceError: (WebResourceError error) {
-            debugPrint('WebView error: ${error.description}');
+            log('WebView error: ${error.description}');
           },
         ),
       );
 
-    final initialUrl =
-        'https://rj8vq174-5173.uks1.devtunnels.ms/record/a18a2476942d423e9a0414443705db60';
-    _controller.loadRequest(Uri.parse(initialUrl));
+    _controller.loadRequest(Uri.parse(_cubit.initialUrl));
   }
 
   Future<void> _scanNFC() async {
@@ -80,7 +80,7 @@ class _NFCScreenState extends State<NFCScreen> {
     bool isAvailable = await _nfcService.isNfcAvailable();
 
     if (!isAvailable) {
-      _showMessage('NFC is not available on this device');
+      customSnackBar(context, 'NFC is not available on this device');
       setState(() {
         _isScanning = false;
       });
@@ -93,7 +93,6 @@ class _NFCScreenState extends State<NFCScreen> {
           _isScanning = false;
         });
 
-        // الحصول على معرف البطاقة مباشرة من tagId
         String? nfcId = data['tagId'];
         log('NFC Tag ID from service: $nfcId');
 
@@ -102,32 +101,23 @@ class _NFCScreenState extends State<NFCScreen> {
           final url = '${_cubit.baseUrl}$nfcId';
           log('Loading WebView URL: $url');
           _controller.loadRequest(Uri.parse(url));
-          _showMessage('NFC tag read successfully: ID $nfcId');
+          customSnackBar(context, 'NFC tag read successfully: ID $nfcId');
         } else {
-          _showMessage('Could not find ID in NFC tag');
+          customSnackBar(context, 'Could not find ID in NFC tag');
         }
       },
       onError: (error) {
         setState(() {
           _isScanning = false;
         });
-        _showMessage('Error: $error');
+        customSnackBar(context, 'Error: $error', ColorManager.error);
       },
       onTimeout: () {
         setState(() {
           _isScanning = false;
         });
-        _showMessage('NFC scan timed out');
+        customSnackBar(context, 'NFC scan timed out');
       },
-    );
-  }
-
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: ColorManager.green,
-      ),
     );
   }
 
@@ -142,7 +132,7 @@ class _NFCScreenState extends State<NFCScreen> {
     // ));
 
     final screenHeight = MediaQuery.of(context).size.height;
-    final refreshThreshold = screenHeight * 0.2; // 20% of screen height
+    final refreshThreshold = screenHeight * 0.2;
 
     return Scaffold(
       body: RefreshIndicator(
@@ -157,7 +147,6 @@ class _NFCScreenState extends State<NFCScreen> {
         displacement: 40,
         child: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
-            // Only allow refresh if scroll position is at the top 20% of the screen
             if (notification is ScrollUpdateNotification) {
               _canRefresh = notification.metrics.pixels <= refreshThreshold;
             }
@@ -167,7 +156,7 @@ class _NFCScreenState extends State<NFCScreen> {
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height,
+              height: context.height,
               child: Stack(
                 children: [
                   WebViewWidget(controller: _controller),
@@ -189,7 +178,7 @@ class _NFCScreenState extends State<NFCScreen> {
                             ),
                             SizedBox(height: 20),
                             Text(
-                              'جاري قراءة بطاقة NFC...',
+                              'Scanning NFC...',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -206,7 +195,7 @@ class _NFCScreenState extends State<NFCScreen> {
           ),
         ),
       ),
-      floatingActionButton: Row(
+      floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
@@ -215,7 +204,7 @@ class _NFCScreenState extends State<NFCScreen> {
             onPressed: _isScanning ? null : _scanNFC,
             child: const Icon(Icons.nfc, color: ColorManager.white),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(height: 16),
           FloatingActionButton(
             heroTag: 'saveButton',
             backgroundColor: ColorManager.green,

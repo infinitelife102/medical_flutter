@@ -13,4 +13,8 @@ class EnvManager {
   static String generativeModelVersion =
       dotenv.env['GENERATIVE_MODEL_VERSION']!;
   static String medicalTips = dotenv.env['DAILY_TIPS_BASE_URL']!;
+  static String medicalRecord =
+      dotenv.env['MEDICAL_RECORD_AND_CONCLUSION_BASE_URL']!;
+  static String defaultMedicalRecordID =
+      dotenv.env['DEFAULT_MEDICAL_RECORD_ID']!;
 }
