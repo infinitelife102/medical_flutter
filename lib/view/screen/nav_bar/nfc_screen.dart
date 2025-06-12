@@ -1,7 +1,11 @@
+import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:dr_ai/controller/webview/webview_cubit.dart';
+import 'package:dr_ai/core/service/nfc_service.dart';
+import 'dart:developer';
 
 import '../../../core/utils/theme/color.dart';
 
@@ -20,6 +24,8 @@ class _NFCScreenState extends State<NFCScreen> {
   bool _isLoading = true;
   late ScrollController _scrollController;
   bool _canRefresh = false;
+  final NfcService _nfcService = NfcService();
+  bool _isScanning = false;
 
   @override
   void initState() {
@@ -58,14 +64,61 @@ class _NFCScreenState extends State<NFCScreen> {
             });
           },
           onWebResourceError: (WebResourceError error) {
-            debugPrint('WebView error: ${error.description}');
+            log('WebView error: ${error.description}');
           },
         ),
       );
 
-    final initialUrl =
-        'https://rj8vq174-5173.uks1.devtunnels.ms/record/a18a2476942d423e9a0414443705db60';
-    _controller.loadRequest(Uri.parse(initialUrl));
+    _controller.loadRequest(Uri.parse(_cubit.initialUrl));
+  }
+
+  Future<void> _scanNFC() async {
+    setState(() {
+      _isScanning = true;
+    });
+
+    bool isAvailable = await _nfcService.isNfcAvailable();
+
+    if (!isAvailable) {
+      customSnackBar(context, 'NFC is not available on this device');
+      setState(() {
+        _isScanning = false;
+      });
+      return;
+    }
+
+    await _nfcService.readNfcData(
+      onTagDiscovered: (data) {
+        setState(() {
+          _isScanning = false;
+        });
+
+        String? nfcId = data['tagId'];
+        log('NFC Tag ID from service: $nfcId');
+
+        if (nfcId != null && nfcId.isNotEmpty) {
+          _cubit.updateWebViewId(nfcId);
+          final url = '${_cubit.baseUrl}$nfcId';
+          log('Loading WebView URL: $url');
+          _controller.loadRequest(Uri.parse(url));
+          customSnackBar(context, 'NFC tag read successfully: ID $nfcId');
+        } else {
+          customSnackBar(context, 'Could not find ID in NFC tag');
+        }
+      },
+      onError: (error) {
+        setState(() {
+          _isScanning = false;
+        });
+        customSnackBar(context, 'Error: $error', ColorManager.error);
+      },
+      onTimeout: () {
+        setState(() {
+          _isScanning = false;
+        });
+        customSnackBar(context, 'NFC scan timed out');
+      },
+    );
   }
 
   @override
@@ -79,7 +132,7 @@ class _NFCScreenState extends State<NFCScreen> {
     // ));
 
     final screenHeight = MediaQuery.of(context).size.height;
-    final refreshThreshold = screenHeight * 0.2; // 20% of screen height
+    final refreshThreshold = screenHeight * 0.2;
 
     return Scaffold(
       body: RefreshIndicator(
@@ -94,7 +147,6 @@ class _NFCScreenState extends State<NFCScreen> {
         displacement: 40,
         child: NotificationListener<ScrollNotification>(
           onNotification: (notification) {
-            // Only allow refresh if scroll position is at the top 20% of the screen
             if (notification is ScrollUpdateNotification) {
               _canRefresh = notification.metrics.pixels <= refreshThreshold;
             }
@@ -104,7 +156,7 @@ class _NFCScreenState extends State<NFCScreen> {
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height,
+              height: context.height,
               child: Stack(
                 children: [
                   WebViewWidget(controller: _controller),
@@ -114,16 +166,52 @@ class _NFCScreenState extends State<NFCScreen> {
                         color: ColorManager.green,
                       ),
                     ),
+                  if (_isScanning)
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(
+                              color: ColorManager.green,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'Scanning NFC...',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: ColorManager.green,
-        onPressed: () {},
-        child: const Icon(Icons.save, color: ColorManager.white),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'nfcButton',
+            backgroundColor: ColorManager.green,
+            onPressed: _isScanning ? null : _scanNFC,
+            child: const Icon(Icons.nfc, color: ColorManager.white),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'saveButton',
+            backgroundColor: ColorManager.green,
+            onPressed: () {},
+            child: const Icon(Icons.save, color: ColorManager.white),
+          ),
+        ],
       ),
     );
   }

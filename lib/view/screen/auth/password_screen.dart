@@ -12,13 +12,16 @@ import '../../widget/my_stepper_form.dart';
 
 class PasswordScreen extends StatefulWidget {
   const PasswordScreen({super.key, required this.email});
+
   final String email;
+
   @override
   State<PasswordScreen> createState() => _PasswordScreenState();
 }
 
 class _PasswordScreenState extends State<PasswordScreen> {
   late GlobalKey<FormState> formKey;
+
   @override
   void initState() {
     super.initState();
@@ -95,7 +98,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
           ),
           CustomTextFormField(
             keyboardType: TextInputType.visiblePassword,
-            obscureText: true,
+            isVisible: true,
             title: "Confirm Password",
             hintText: "Enter Your Confirm Password",
             onSaved: (data) {

@@ -18,13 +18,16 @@ import '../../widget/my_stepper_form.dart';
 
 class CreateProfile extends StatefulWidget {
   const CreateProfile({super.key, required this.userCredential});
+
   final List<String?> userCredential;
+
   @override
   State<CreateProfile> createState() => _CreateProfileState();
 }
 
 class _CreateProfileState extends State<CreateProfile> {
   late GlobalKey<FormState> formKey;
+
   @override
   void initState() {
     super.initState();
@@ -199,26 +202,37 @@ class _CreateProfileState extends State<CreateProfile> {
               onSaved: (data) {
                 _bloodType = data!.name.toString();
               }),
-          CustomTextFormField(
-            keyboardType: TextInputType.number,
-            title: "Height ( CM )",
-            hintText: "Enter your height",
-            onSaved: (data) {
-              _height = data!;
-            },
-            validator: cubit.heightValidator,
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextFormField(
+                  keyboardType: TextInputType.number,
+                  title: "Height ( CM )",
+                  hintText: "Enter your height",
+                  onSaved: (data) {
+                    _height = data!;
+                  },
+                  validator: cubit.heightValidator,
+                ),
+              ),
+              Gap(18),
+              Expanded(
+                child: CustomTextFormField(
+                  keyboardType: TextInputType.number,
+                  title: "Weight ( KG )",
+                  hintText: "Enter your weight",
+                  onSaved: (data) {
+                    _weight = data!;
+                  },
+                  validator: cubit.weightValidator,
+                ),
+              ),
+            ],
           ),
           CustomTextFormField(
-            keyboardType: TextInputType.number,
-            title: "Weight ( KG )",
-            hintText: "Enter your weight",
-            onSaved: (data) {
-              _weight = data!;
-            },
-            validator: cubit.weightValidator,
-          ),
-          CustomTextFormField(
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.multiline,
+            maxLines: 4,
+            closeWhenTapOutside: true,
             title: "chronic diseases",
             hintText: "Enter your chronic diseases",
             onSaved: (data) {
@@ -226,7 +240,9 @@ class _CreateProfileState extends State<CreateProfile> {
             },
           ),
           CustomTextFormField(
-            keyboardType: TextInputType.name,
+            keyboardType: TextInputType.multiline,
+            maxLines: 4,
+            closeWhenTapOutside: true,
             title: "Family history of chronic diseases",
             hintText: "Enter your Family history of chronic diseases",
             onSaved: (data) {
