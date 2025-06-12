@@ -1,4 +1,5 @@
 import 'package:dr_ai/core/utils/constant/image.dart';
+import 'package:dr_ai/core/utils/theme/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -30,7 +31,8 @@ class _CustomErrorScreenState extends State<CustomErrorScreen>
     _controller = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
-    )..repeat(reverse: true);
+    )
+      ..repeat(reverse: true);
     _animation = Tween<double>(begin: 0.0, end: 10.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
@@ -75,18 +77,26 @@ class _CustomErrorScreenState extends State<CustomErrorScreen>
                 const SizedBox(height: 24),
                 Text(
                   'Oops! Something went wrong',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: ColorManager.green,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(
+                      color: ColorManager.green,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontFamilyManager.poppins),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
                 Text(
                   widget.errorMessage,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: ColorManager.darkGrey,
-                      ),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyLarge
+                      ?.copyWith(
+                      color: ColorManager.darkGrey,
+                      fontFamily: FontFamilyManager.poppins),
                   textAlign: TextAlign.center,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
@@ -104,35 +114,37 @@ class _CustomErrorScreenState extends State<CustomErrorScreen>
                     // Show detailed error in debug mode
                     showDialog(
                       context: context,
-                      builder: (context) => AlertDialog(
-                        title: const Text('Error Details'),
-                        titleTextStyle: TextStyle(
-                          color: ColorManager.green,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                        content: SingleChildScrollView(
-                          child: Text(widget.stackTrace),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text(
-                              'Close',
-                              style: TextStyle(
-                                color: ColorManager.green,
-                              ),
+                      builder: (context) =>
+                          AlertDialog(
+                            title: const Text('Error Details'),
+                            titleTextStyle: TextStyle(
+                              color: ColorManager.green,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontFamilyManager.poppins,
+                              fontSize: 18,
                             ),
+                            content: SingleChildScrollView(
+                              child: SelectableText(widget.stackTrace),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: Text(
+                                  'Close',
+                                  style: TextStyle(
+                                      color: ColorManager.green,
+                                      fontFamily: FontFamilyManager.poppins),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
                     );
                   },
                   child: Text(
                     'View Details',
                     style: TextStyle(
-                      color: ColorManager.green,
-                    ),
+                        color: ColorManager.green,
+                        fontFamily: FontFamilyManager.poppins),
                   ),
                 ),
               ],
