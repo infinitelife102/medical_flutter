@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:dr_ai/controller/webview/webview_cubit.dart';
+import 'package:dr_ai/core/service/nfc_service.dart';
+import 'dart:developer';
 
 import '../../../core/utils/theme/color.dart';
 
@@ -20,6 +22,8 @@ class _NFCScreenState extends State<NFCScreen> {
   bool _isLoading = true;
   late ScrollController _scrollController;
   bool _canRefresh = false;
+  final NfcService _nfcService = NfcService();
+  bool _isScanning = false;
 
   @override
   void initState() {
@@ -68,6 +72,65 @@ class _NFCScreenState extends State<NFCScreen> {
     _controller.loadRequest(Uri.parse(initialUrl));
   }
 
+  Future<void> _scanNFC() async {
+    setState(() {
+      _isScanning = true;
+    });
+
+    bool isAvailable = await _nfcService.isNfcAvailable();
+
+    if (!isAvailable) {
+      _showMessage('NFC is not available on this device');
+      setState(() {
+        _isScanning = false;
+      });
+      return;
+    }
+
+    await _nfcService.readNfcData(
+      onTagDiscovered: (data) {
+        setState(() {
+          _isScanning = false;
+        });
+
+        // الحصول على معرف البطاقة مباشرة من tagId
+        String? nfcId = data['tagId'];
+        log('NFC Tag ID from service: $nfcId');
+
+        if (nfcId != null && nfcId.isNotEmpty) {
+          _cubit.updateWebViewId(nfcId);
+          final url = '${_cubit.baseUrl}$nfcId';
+          log('Loading WebView URL: $url');
+          _controller.loadRequest(Uri.parse(url));
+          _showMessage('NFC tag read successfully: ID $nfcId');
+        } else {
+          _showMessage('Could not find ID in NFC tag');
+        }
+      },
+      onError: (error) {
+        setState(() {
+          _isScanning = false;
+        });
+        _showMessage('Error: $error');
+      },
+      onTimeout: () {
+        setState(() {
+          _isScanning = false;
+        });
+        _showMessage('NFC scan timed out');
+      },
+    );
+  }
+
+  void _showMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: ColorManager.green,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -114,16 +177,52 @@ class _NFCScreenState extends State<NFCScreen> {
                         color: ColorManager.green,
                       ),
                     ),
+                  if (_isScanning)
+                    Container(
+                      color: Colors.black.withOpacity(0.5),
+                      child: const Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            CircularProgressIndicator(
+                              color: ColorManager.green,
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              'جاري قراءة بطاقة NFC...',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: ColorManager.green,
-        onPressed: () {},
-        child: const Icon(Icons.save, color: ColorManager.white),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'nfcButton',
+            backgroundColor: ColorManager.green,
+            onPressed: _isScanning ? null : _scanNFC,
+            child: const Icon(Icons.nfc, color: ColorManager.white),
+          ),
+          const SizedBox(width: 16),
+          FloatingActionButton(
+            heroTag: 'saveButton',
+            backgroundColor: ColorManager.green,
+            onPressed: () {},
+            child: const Icon(Icons.save, color: ColorManager.white),
+          ),
+        ],
       ),
     );
   }
