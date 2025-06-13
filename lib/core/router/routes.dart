@@ -20,4 +20,10 @@ class RouteManager {
   static const deleteAccount = "/deleteAccount";
   static const termsAndConditions = "/termsAndConditions";
   static const privacyPolicy = "/privacyPolicy";
+  static const contactUs = "/contactUs";
+  static const help = "/help";
+  static const support = "/support";
+  static const appUpdates = "/appUpdates";
+  static const appSocialMedia = "/socialMedia";
+  static const appFeedback = "/appFeedback";
 }
