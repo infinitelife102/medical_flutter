@@ -53,4 +53,15 @@ class LaunchUriCubit extends Cubit<LaunchUriState> {
       Future.error(Exception("Failed to open email app: $err"));
     }
   }
+
+  Future<void> openLink({required String url}) async {
+    try {
+      final Uri launchUri = Uri.parse(url);
+      await launchUrl(launchUri, mode: LaunchMode.externalApplication);
+      emit(LaunchUriState.launchOpen);
+    } catch (err) {
+      emit(LaunchUriState.launchFailure);
+      Future.error(Exception("Failed to open link: $err"));
+    }
+  }
 }

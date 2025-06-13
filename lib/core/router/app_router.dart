@@ -1,4 +1,7 @@
+import '../../view/screen/account/app_feedback_screen.dart';
+import '../../view/screen/account/app_updates_screen.dart';
 import '../../view/screen/account/privacy_policy.dart';
+import '../../view/screen/account/social_media_screen.dart';
 import '../../view/screen/account/terms_and_conditions.dart';
 import 'routes.dart';
 import '../../controller/auth/log_out/log_out_cubit.dart';
@@ -122,6 +125,15 @@ class AppRouter {
               create: (_) => LaunchUriCubit(),
               child: const PrivacyPolicyScreen()),
         );
+      case RouteManager.appUpdates:
+        return PageTransitionManager.materialSlideTransition(
+            const AppUpdatesScreen());
+      case RouteManager.appSocialMedia:
+        return PageTransitionManager.materialSlideTransition(
+            const SocialMediaScreen());
+      case RouteManager.appFeedback:
+        return PageTransitionManager.materialSlideTransition(
+            const AppFeedbackScreen());
       default:
         return null;
     }
