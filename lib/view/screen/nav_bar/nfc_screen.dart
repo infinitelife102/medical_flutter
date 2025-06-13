@@ -1,12 +1,11 @@
 import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:dr_ai/controller/webview/webview_cubit.dart';
 import 'package:dr_ai/core/service/nfc_service.dart';
 import 'dart:developer';
 
+import '../../../controller/medical_record/medical_record_cubit.dart';
 import '../../../core/utils/theme/color.dart';
 
 class NFCScreen extends StatefulWidget {
@@ -20,7 +19,7 @@ class NFCScreen extends StatefulWidget {
 
 class _NFCScreenState extends State<NFCScreen> {
   late WebViewController _controller;
-  late final WebViewCubit _cubit;
+  late final MedicalRecordCubit _cubit;
   bool _isLoading = true;
   late ScrollController _scrollController;
   bool _canRefresh = false;
@@ -30,7 +29,7 @@ class _NFCScreenState extends State<NFCScreen> {
   @override
   void initState() {
     super.initState();
-    _cubit = WebViewCubit();
+    _cubit = MedicalRecordCubit();
     _scrollController = ScrollController();
 
     if (widget.id != null) {

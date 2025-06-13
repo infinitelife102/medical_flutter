@@ -4,10 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:dr_ai/core/utils/constant/api_url.dart';
 import 'package:equatable/equatable.dart';
 
-part 'webview_state.dart';
+part 'medical_record_state.dart';
 
-class WebViewCubit extends Cubit<WebViewState> {
-  WebViewCubit() : super(WebViewState.initial());
+class MedicalRecordCubit extends Cubit<MedicalRecordState> {
+  MedicalRecordCubit() : super(MedicalRecordState.initial());
 
   static String defaultId = EnvManager.defaultMedicalRecordID;
 

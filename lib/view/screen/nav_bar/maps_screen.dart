@@ -18,7 +18,6 @@ import 'package:dr_ai/view/widget/locker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -511,6 +510,7 @@ class _MapScreenState extends State<MapScreen> {
         if (state is FindHospitalLoading) {
           _isLoading = true;
         } else if (state is FindHospitalSuccess) {
+          context.read<PermissionsCubit>().checkMapLockStatus();
           _isLoading = false;
           _hospitalList = state.hospitalsList;
           _addMarkersFromHospitalList();
@@ -755,26 +755,5 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
     );
-  }
-
-  // Method to lock the screen
-  void lockScreen() {
-    setState(() {
-      _isScreenLocked = true;
-    });
-  }
-
-  // Method to unlock the screen
-  void unlockScreen() {
-    setState(() {
-      _isScreenLocked = false;
-    });
-  }
-
-  // Method to toggle screen lock
-  void toggleScreenLock() {
-    setState(() {
-      _isScreenLocked = !_isScreenLocked;
-    });
   }
 }

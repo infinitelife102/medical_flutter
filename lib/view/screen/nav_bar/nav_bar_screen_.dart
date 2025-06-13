@@ -1,11 +1,9 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:dr_ai/controller/permissions/permissions_cubit.dart';
 import 'package:dr_ai/core/utils/theme/color.dart';
 import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:dr_ai/view/screen/nav_bar/account_screen.dart';
 import 'package:dr_ai/view/screen/nav_bar/nfc_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -59,7 +57,6 @@ class _NavbarScreenState extends State<NavbarScreen> {
   }
 
   int _bottomNavIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,9 +92,6 @@ class _NavbarScreenState extends State<NavbarScreen> {
         onTap: (index) => setState(() => _bottomNavIndex = index),
         itemCount: 4,
         tabBuilder: (int index, bool isActive) {
-          if (index == 3) {
-            context.read<PermissionsCubit>().checkMapLockStatus();
-          }
           return CustomToolTip(
             message: _buildItems()["text"]![index],
             child: Column(
