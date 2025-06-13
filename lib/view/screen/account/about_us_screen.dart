@@ -1,6 +1,10 @@
+import 'package:dr_ai/core/router/routes.dart';
 import 'package:dr_ai/core/utils/helper/custom_dialog.dart';
 import 'package:dr_ai/core/utils/helper/error_screen.dart';
 import 'package:dr_ai/core/utils/helper/extention.dart';
+import 'package:dr_ai/view/screen/account/app_feedback_screen.dart';
+import 'package:dr_ai/view/screen/account/app_updates_screen.dart';
+import 'package:dr_ai/view/screen/account/social_media_screen.dart';
 import 'package:dr_ai/view/widget/custom_scrollable_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,18 +34,23 @@ class AboutUsScreen extends StatelessWidget {
                 BuildProfileCard(
                   title: "App Updates",
                   image: ImageManager.updateIcon,
-                  onPressed: () {},
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteManager.appUpdates),
                 ),
                 divider,
                 BuildProfileCard(
-                    title: "App Feedback",
-                    image: ImageManager.feedbackIcon,
-                    onPressed: () {}),
+                  title: "App Feedback",
+                  image: ImageManager.feedbackIcon,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteManager.appFeedback),
+                ),
                 divider,
                 BuildProfileCard(
-                    title: "Social Media",
-                    image: ImageManager.socialMediaIcon,
-                    onPressed: () {}),
+                  title: "Social Media",
+                  image: ImageManager.socialMediaIcon,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, RouteManager.appSocialMedia),
+                ),
                 divider,
                 BuildProfileCard(
                     removeColorIcon: true,
