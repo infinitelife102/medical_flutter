@@ -4,9 +4,12 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../model/feedback_model.dart';
+
 class FirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+
   static Future<void> storeUserData({
     required String name,
     required String phoneNumber,
@@ -187,5 +190,23 @@ class FirebaseService {
   static Future<void> updateUserDisplayName({String? name}) async {
     await FirebaseAuth.instance.currentUser!.updateDisplayName(name);
     log(FirebaseAuth.instance.currentUser!.displayName.toString());
+  }
+
+  static Future<bool> submitFeedback(FeedbackModel feedback) async {
+    try {
+      final String? userId = _auth.currentUser?.uid;
+
+      final Map<String, dynamic> feedbackData = {
+        ...feedback.toMap(),
+        'userId': userId,
+        'submitted': DateTime.now().toIso8601String(),
+      };
+
+      await _firestore.collection('feedback').add(feedbackData);
+      return true;
+    } catch (e) {
+      log('Error submitting feedback: $e');
+      return false;
+    }
   }
 }

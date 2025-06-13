@@ -20,9 +20,59 @@ class RatingScreen extends StatefulWidget {
   RatingScreenState createState() => RatingScreenState();
 }
 
-class RatingScreenState extends State<RatingScreen> {
-  int _selectedRating = CacheData.getdata(key: "rating") ?? 0;
+class RatingScreenState extends State<RatingScreen>
+    with SingleTickerProviderStateMixin {
+  int _selectedRating = 0;
   bool _isloading = false;
+  bool _isInitialized = false;
+
+  late AnimationController _animationController;
+  late List<Animation<double>> _starAnimations;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _starAnimations = List.generate(5, (index) {
+      return Tween<double>(begin: 1.0, end: 1.3).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Interval(index * 0.1, index * 0.1 + 0.5,
+              curve: Curves.elasticOut),
+        ),
+      );
+    });
+
+    final cachedRating = CacheData.getdata(key: "rating");
+    if (cachedRating != null && cachedRating > 0) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        _updateRating(cachedRating, animateOnLoad: true);
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _updateRating(int rating, {bool animateOnLoad = false}) {
+    if (_selectedRating != rating || animateOnLoad) {
+      setState(() {
+        _selectedRating = rating;
+        _isInitialized = true;
+      });
+      _animationController.reset();
+      _animationController.forward();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -79,29 +129,35 @@ class RatingScreenState extends State<RatingScreen> {
                     textAlign: TextAlign.center,
                     style: context.textTheme.bodySmall,
                   ),
-                  Gap(4.h),
+                  Gap(12.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
                       final starNumber = index + 1;
-                      return IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: _selectedRating >= starNumber
-                            ? Icon(
-                                Icons.star_rounded,
-                                color: ColorManager.amber,
-                                size: 40.r,
-                              )
-                            : Icon(
-                                color: ColorManager.dark,
-                                Icons.star_border_rounded,
-                                size: 40.r,
-                              ),
-                        onPressed: () {
-                          setState(() {
-                            _selectedRating = starNumber;
-                          });
-                        },
+                      return GestureDetector(
+                        onTap: () => _updateRating(starNumber),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          child: AnimatedBuilder(
+                            animation: _animationController,
+                            builder: (context, child) {
+                              return Transform.scale(
+                                scale: _selectedRating >= starNumber
+                                    ? _starAnimations[index].value
+                                    : 1.0,
+                                child: Icon(
+                                  _selectedRating >= starNumber
+                                      ? Icons.star_rounded
+                                      : Icons.star_border_rounded,
+                                  color: _selectedRating >= starNumber
+                                      ? ColorManager.amber
+                                      : ColorManager.grey,
+                                  size: 45.r,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       );
                     }),
                   ),
