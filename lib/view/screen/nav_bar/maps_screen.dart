@@ -1,20 +1,24 @@
 import 'dart:async';
 import 'dart:developer' as log;
 import 'dart:math';
+import 'package:dr_ai/core/utils/constant/image.dart';
 import 'package:dr_ai/core/utils/theme/color.dart';
 import 'package:dr_ai/core/utils/helper/extention.dart';
 import 'package:dr_ai/core/utils/helper/location.dart';
 import 'package:dr_ai/data/model/place_directions.dart';
 import 'package:dr_ai/data/model/place_location.dart';
 import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
+import 'package:dr_ai/controller/permissions/permissions_cubit.dart';
 import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:dr_ai/view/widget/custom_button.dart';
 import 'package:dr_ai/view/widget/custom_tooltip.dart';
 import 'package:dr_ai/view/widget/directions_details_card.dart';
 import 'package:dr_ai/view/widget/floating_search_bar.dart';
+import 'package:dr_ai/view/widget/locker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:location/location.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -37,11 +41,17 @@ class _MapScreenState extends State<MapScreen> {
     _scaffoldKey = GlobalKey<ScaffoldState>();
     _getCurrentLocation();
 
-    // _loadCachedHospitals();
+    _checkMapLockStatus();
   }
+
+  void _checkMapLockStatus() =>
+      context.read<PermissionsCubit>().checkMapLockStatus();
 
   late GlobalKey<ScaffoldState> _scaffoldKey;
   final Location _location = Location();
+
+  bool _isScreenLocked = false;
+  String? _message;
 
   Future<void> _getCurrentLocation() async {
     LocationData? locationData =
@@ -102,64 +112,90 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        drawerScrimColor: ColorManager.black.withOpacity(0.4),
-        drawer: _buildDrawer(),
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            _locationData != null ? _buildMap() : _buildLoadingIndicator(),
-            _buildSelectedPlaceLocation(),
-            _isSearchedPlaceMarkerClicked && _placeDirections != null
-                ? DistanceAndTime(
-                    isTimeAndDistanceVisible: _isTimeAndDistanceVisible,
-                    placeDirections: _placeDirections)
-                : Container(),
-            _buildPlaceDirections(),
-            const MyFloatingSearchBar(),
-          ],
-        ),
-        floatingActionButton: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (_isTimeAndDistanceVisible)
+    return BlocListener<PermissionsCubit, PermissionsState>(
+      listener: (context, state) {
+        if (state is MapLockSuccessState) {
+          _isScreenLocked = !state.isMapEnabled;
+          _message = state.message;
+          setState(() {});
+        }
+        if (state is MapLockUpdateSuccessState) {
+          _isScreenLocked = !state.isMapEnabled;
+          setState(() {});
+        }
+        if (state is MapLockErrorState) {
+          customSnackBar(
+              context, "Failed to check map lock status: ${state.error}");
+          _message = state.error;
+          _isScreenLocked = true;
+          setState(() {});
+        }
+      },
+      child: LockerWidget(
+        isLocked: _isScreenLocked,
+        svgIconPath: ImageManager.splashLogo,
+        message: _message,
+        child: Scaffold(
+          key: _scaffoldKey,
+          drawerScrimColor: ColorManager.black.withOpacity(0.4),
+          drawer: _buildDrawer(),
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: Stack(
+            children: [
+              _locationData != null ? _buildMap() : _buildLoadingIndicator(),
+              _buildSelectedPlaceLocation(),
+              _isSearchedPlaceMarkerClicked && _placeDirections != null
+                  ? DistanceAndTime(
+                      isTimeAndDistanceVisible: _isTimeAndDistanceVisible,
+                      placeDirections: _placeDirections)
+                  : Container(),
+              _buildPlaceDirections(),
+              const MyFloatingSearchBar(),
+            ],
+          ),
+          floatingActionButton: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (_isTimeAndDistanceVisible)
+                CustomToolTip(
+                  bottomMargin: 20,
+                  message: "Searched Location",
+                  child: FloatingActionButton.small(
+                    splashColor: ColorManager.white.withOpacity(0.3),
+                    backgroundColor: ColorManager.green,
+                    heroTag: 2,
+                    onPressed: () {
+                      _goToSearchedPlaceLocation();
+                    },
+                    child: const Icon(
+                      Icons.location_searching_outlined,
+                      color: ColorManager.white,
+                    ),
+                  ),
+                )
+              else
+                const SizedBox(),
+              Gap(10.h),
               CustomToolTip(
                 bottomMargin: 20,
-                message: "Searched Location",
-                child: FloatingActionButton.small(
+                message: "Current Location",
+                child: FloatingActionButton(
                   splashColor: ColorManager.white.withOpacity(0.3),
                   backgroundColor: ColorManager.green,
-                  heroTag: 2,
-                  onPressed: () {
-                    _goToSearchedPlaceLocation();
-                  },
+                  heroTag: 3,
+                  onPressed: _goToMyCurrentLocation,
                   child: const Icon(
-                    Icons.location_searching_outlined,
+                    Icons.zoom_in_map_rounded,
                     color: ColorManager.white,
                   ),
                 ),
-              )
-            else
-              const SizedBox(),
-            Gap(10.h),
-            CustomToolTip(
-              bottomMargin: 20,
-              message: "Current Location",
-              child: FloatingActionButton(
-                splashColor: ColorManager.white.withOpacity(0.3),
-                backgroundColor: ColorManager.green,
-                heroTag: 3,
-                onPressed: _goToMyCurrentLocation,
-                child: const Icon(
-                  Icons.zoom_in_map_rounded,
-                  color: ColorManager.white,
-                ),
               ),
-            ),
-          ],
-        ));
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _buildCameraNewPosition() {
@@ -719,5 +755,26 @@ class _MapScreenState extends State<MapScreen> {
         ),
       ),
     );
+  }
+
+  // Method to lock the screen
+  void lockScreen() {
+    setState(() {
+      _isScreenLocked = true;
+    });
+  }
+
+  // Method to unlock the screen
+  void unlockScreen() {
+    setState(() {
+      _isScreenLocked = false;
+    });
+  }
+
+  // Method to toggle screen lock
+  void toggleScreenLock() {
+    setState(() {
+      _isScreenLocked = !_isScreenLocked;
+    });
   }
 }
