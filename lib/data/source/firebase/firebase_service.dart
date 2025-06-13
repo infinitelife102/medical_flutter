@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +7,33 @@ import '../../model/feedback_model.dart';
 class FirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  static Future<List> checkMapLockStatus() async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> querySnapshot =
+          await FirebaseFirestore.instance.collection('enable_map').get();
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot
+          in querySnapshot.docs) {
+        bool isEnabled = documentSnapshot.data()['isEnabled'] as bool;
+        String message = documentSnapshot.data()['message'] as String;
+        return [
+          isEnabled,
+          message,
+        ];
+      }
+      return [
+        false,
+        "",
+      ];
+    } catch (e) {
+      log('Error fetching map lock status: $e');
+      return [
+        false,
+        "An error occurred while fetching the map lock status.",
+      ];
+    }
+  }
 
   static Future<void> storeUserData({
     required String name,

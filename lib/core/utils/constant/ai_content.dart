@@ -1,6 +1,8 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
+import '../../cache/cache.dart';
+
 class AiConstantsContent {
   const AiConstantsContent._();
 
@@ -14,5 +16,8 @@ class AiConstantsContent {
     Content.text(dotenv.env['TEXT_7']!),
     Content.text(dotenv.env['TEXT_8']!),
     Content.text(dotenv.env['TEXT_9']!),
+    // Content.text(dotenv.env['TEXT_10']!),
+    Content.text((CacheData.getMapData(key: "userData"))["name"] ??
+        "User"),
   ];
 }

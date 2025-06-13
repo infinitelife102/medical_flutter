@@ -1,3 +1,4 @@
+import 'package:dr_ai/controller/permissions/permissions_cubit.dart';
 import 'package:dr_ai/core/router/routes.dart';
 import 'package:dr_ai/controller/chat/chat_cubit.dart';
 import 'package:dr_ai/controller/validation/formvalidation_cubit.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => AccountCubit(),
+        ),
+        BlocProvider(
+          create: (_) => PermissionsCubit(),
         ),
       ],
       child: ScreenUtilInit(
