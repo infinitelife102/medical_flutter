@@ -1,17 +1,13 @@
 import 'package:dr_ai/core/router/routes.dart';
-import 'package:dr_ai/core/utils/helper/custom_dialog.dart';
 import 'package:dr_ai/core/utils/helper/error_screen.dart';
 import 'package:dr_ai/core/utils/helper/extention.dart';
-import 'package:dr_ai/view/screen/account/app_feedback_screen.dart';
-import 'package:dr_ai/view/screen/account/app_updates_screen.dart';
-import 'package:dr_ai/view/screen/account/social_media_screen.dart';
 import 'package:dr_ai/view/widget/custom_scrollable_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import '../../../core/utils/theme/color.dart';
-import '../../../core/utils/constant/image.dart';
-import '../../widget/build_profile_card.dart';
+import '../../../../core/utils/theme/color.dart';
+import '../../../../core/utils/constant/image.dart';
+import '../../../widget/build_profile_card.dart';
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
@@ -58,7 +54,8 @@ class AboutUsScreen extends StatelessWidget {
                     image: ImageManager.splashLogo,
                     onPressed: () => context.push(CustomErrorScreen(
                         errorMessage: "Support is currently unavailable",
-                        stackTrace: "Please try again later"))),
+                        stackTrace:
+                            "This is a test designed to simulate a production exception"))),
               ],
             ),
           ),

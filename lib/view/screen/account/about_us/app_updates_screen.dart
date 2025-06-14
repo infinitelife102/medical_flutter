@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import '../../../core/utils/constant/image.dart';
-import '../../../core/utils/theme/color.dart';
-import '../../../core/utils/theme/fonts.dart';
+
+import '../../../../core/utils/constant/image.dart';
+import '../../../../core/utils/theme/color.dart';
+import '../../../../core/utils/theme/fonts.dart';
 
 class AppUpdatesScreen extends StatelessWidget {
   const AppUpdatesScreen({super.key});
@@ -39,12 +40,24 @@ class AppUpdatesScreen extends StatelessWidget {
                   _buildSectionTitle("What's New"),
                   Gap(16.h),
                   _buildUpdateItem(
+                    version: "3.2.0",
+                    date: "June 14, 2025",
+                    changes: [
+                      "Completed all NFC features implementation",
+                      "Enhanced Google Maps Performance",
+                      "UI improvements across the application",
+                      "Fixed all reported issues and bugs",
+                      "Overall performance optimization"
+                    ],
+                  ),
+                  _buildDivider(),
+                  _buildUpdateItem(
                     version: "3.1.0",
                     date: "June 13, 2025",
                     changes: [
                       "Enhanced NFC reading capabilities for medical records",
-                      "Added voice chat with AI medical assistant",
                       "Improved UI/UX for easier navigation",
+                      "Added voice chat with AI medical assistant",
                       "Updated Terms & Conditions and Privacy Policy",
                       "Fixed bugs and enhanced overall performance"
                     ],
@@ -141,7 +154,7 @@ class AppUpdatesScreen extends StatelessWidget {
           ),
           Gap(8.h),
           Text(
-            "3.1.0",
+            "3.2.0",
             style: TextStyle(
               fontFamily: FontFamilyManager.poppins,
               fontSize: 24.sp,

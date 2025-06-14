@@ -411,23 +411,23 @@ class _MapScreenState extends State<MapScreen> {
   }
 
   Widget _buildLoadingIndicator() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-        alignment: Alignment.center,
-        width: 50.w,
-        height: 50.w,
-        decoration: const BoxDecoration(
-          color: ColorManager.green,
-          shape: BoxShape.circle,
-        ),
-        child: SizedBox(
-          width: 25.w,
-          height: 25.w,
-          child: const CircularProgressIndicator(
-            strokeCap: StrokeCap.round,
-            color: ColorManager.white,
-          ),
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: const Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ButtonLoadingIndicator(),
+            SizedBox(height: 20),
+            Text(
+              'Loading Map...',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
     );

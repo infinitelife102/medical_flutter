@@ -4,11 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../controller/launch_uri/launch_uri_cubit.dart';
-import '../../../core/utils/constant/image.dart';
-import '../../../core/utils/theme/color.dart';
-import '../../../core/utils/theme/fonts.dart';
-import '../../widget/custom_scrollable_appbar.dart';
+
+import '../../../../controller/launch_uri/launch_uri_cubit.dart';
+import '../../../../core/utils/constant/image.dart';
+import '../../../../core/utils/theme/color.dart';
+import '../../../../core/utils/theme/fonts.dart';
+
 
 class SocialMediaScreen extends StatelessWidget {
   const SocialMediaScreen({super.key});
@@ -77,11 +78,11 @@ class SocialMediaScreen extends StatelessWidget {
                     _buildSocialMediaItem(
                       context: context,
                       title: "Instagram",
-                      subtitle: "@drai_medical",
+                      subtitle: "@drai_healthcare",
                       iconUrl:
                           "https://cdn-icons-png.flaticon.com/512/174/174855.png",
                       onTap: () => _openPlatformLink(
-                          context, "https://www.instagram.com/drai_medical"),
+                          context, "https://www.instagram.com/drai_healthcare"),
                     ),
                     _buildDivider(),
                     _buildSocialMediaItem(
@@ -136,13 +137,10 @@ class SocialMediaScreen extends StatelessWidget {
 
   void _openPlatformLink(BuildContext context, String url) {
     try {
-      // First try using the LaunchUriCubit
       context.read<LaunchUriCubit>().openLink(url: url);
     } catch (e) {
-      // Fallback to direct URL launcher if cubit fails
       final Uri uri = Uri.parse(url);
       launchUrl(uri, mode: LaunchMode.externalApplication).catchError((_) {
-        // Show error dialog if both methods fail
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Could not open $url')),
         );
