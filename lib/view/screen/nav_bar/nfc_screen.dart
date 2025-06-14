@@ -1,5 +1,6 @@
 import 'package:dr_ai/core/utils/constant/api_url.dart';
 import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
+import 'package:dr_ai/core/utils/helper/download_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -9,6 +10,8 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:open_filex/open_filex.dart';
 
 import '../../../controller/medical_record/medical_record_cubit.dart';
 import '../../../core/utils/theme/color.dart';
@@ -29,6 +32,8 @@ class _NFCScreenState extends State<NFCScreen> {
   bool _isLoading = true;
   final NfcService _nfcService = NfcService();
   bool _isScanning = false;
+  String? _downloadedFilePath;
+  bool _isFileDownloaded = false;
 
   @override
   void initState() {
@@ -124,8 +129,33 @@ class _NFCScreenState extends State<NFCScreen> {
       _isLoading = true;
     });
 
+    bool isCancelled = false;
+    CancelToken cancelToken = CancelToken();
+
+    Function? updateDialog;
+
     try {
-      customSnackBar(context, 'Starting PDF download...');
+      showDownloadProgressDialog(
+        context: context,
+        initialMessage: 'Preparing to download PDF...',
+        onControllerReady: (updateFn) {
+          updateDialog = updateFn;
+        },
+        onCancel: () {
+          isCancelled = true;
+          cancelToken.cancel('Download cancelled by user');
+          Navigator.of(context, rootNavigator: true).pop();
+          _showMessageDialog(
+              context, 'Download Cancelled', 'Download operation was cancelled',
+              isError: true);
+        },
+        onOpen: () {
+          Navigator.of(context, rootNavigator: true).pop();
+          _openDownloadedFile();
+        },
+      );
+
+      await Future.delayed(Duration(milliseconds: 200));
 
       final permissionManager = PermissionManager();
       bool permissionGranted = await permissionManager.requestPermission();
@@ -154,6 +184,7 @@ class _NFCScreenState extends State<NFCScreen> {
         String filePath = '${directory.path}/$fileName';
 
         log('Downloading PDF to: $filePath');
+        updateDialog?.call(0.05, 'Establishing connection...', false);
 
         final dio = Dio();
 
@@ -170,16 +201,33 @@ class _NFCScreenState extends State<NFCScreen> {
                     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
               },
             ),
+            cancelToken: cancelToken,
+            onReceiveProgress: (received, total) {
+              if (total != -1 && !isCancelled) {
+                final progress = received / total;
+                updateDialog?.call(
+                    progress,
+                    'Downloading PDF... ${(progress * 100).toStringAsFixed(0)}%',
+                    false);
+              }
+            },
           );
 
           if (response.statusCode == 200) {
             final file = File(filePath);
+            updateDialog?.call(0.95, 'Saving file...', false);
             await file.writeAsBytes(response.data);
+
             if (await file.exists() && await file.length() > 0) {
               log('File downloaded successfully to: ${file.path} with size: ${await file.length()} bytes');
 
-              customSnackBar(context, 'PDF downloaded to: ${file.path}',
-                  ColorManager.green);
+              _downloadedFilePath = file.path;
+              _isFileDownloaded = true;
+
+              updateDialog?.call(
+                  1.0, 'PDF downloaded successfully to Downloads folder', true);
+
+              setState(() {});
             } else {
               throw Exception('File was created but is empty or invalid');
             }
@@ -187,50 +235,292 @@ class _NFCScreenState extends State<NFCScreen> {
             throw Exception('Failed to download file: ${response.statusCode}');
           }
         } catch (dioError) {
+          if (isCancelled) {
+            return;
+          }
+
           log('Initial download method failed: $dioError');
           log('Trying alternative download method...');
 
+          updateDialog?.call(
+              0.1, 'Trying alternative download method...', false);
+
           try {
-            await dio.download(url, filePath,
-                options: Options(
-                  followRedirects: true,
-                  validateStatus: (status) => status != null && status < 500,
-                ), onReceiveProgress: (received, total) {
-              if (total != -1) {
-                final progress = (received / total * 100).toStringAsFixed(0);
-                log('Download progress: $progress%');
-              }
-            });
+            await dio.download(
+              url,
+              filePath,
+              options: Options(
+                followRedirects: true,
+                validateStatus: (status) => status != null && status < 500,
+              ),
+              cancelToken: cancelToken,
+              onReceiveProgress: (received, total) {
+                if (total != -1 && !isCancelled) {
+                  final progress = received / total;
+                  updateDialog?.call(
+                      progress,
+                      'Downloading PDF... ${(progress * 100).toStringAsFixed(0)}%',
+                      false);
+                }
+              },
+            );
 
             final file = File(filePath);
             if (await file.exists() && await file.length() > 0) {
               log('File downloaded successfully with alternative method. Size: ${await file.length()} bytes');
-              customSnackBar(context, 'PDF downloaded to: ${file.path}',
-                  ColorManager.green);
+
+              _downloadedFilePath = file.path;
+              _isFileDownloaded = true;
+
+              updateDialog?.call(
+                  1.0, 'PDF downloaded successfully to Downloads folder', true);
+
+              setState(() {});
             } else {
               throw Exception(
                   'Alternative download failed: File is empty or invalid');
             }
           } catch (alternativeError) {
+            if (isCancelled) {
+              return;
+            }
             throw Exception('All download attempts failed: $alternativeError');
           }
         }
       } else {
-        customSnackBar(
-            context,
+        Navigator.of(context, rootNavigator: true).pop();
+        _showMessageDialog(context, 'Permission Error',
             'Storage permission denied. Please enable in settings.',
-            ColorManager.error);
+            isError: true);
         openAppSettings();
       }
     } catch (e) {
-      log('Error downloading PDF: $e');
-      customSnackBar(context, 'Error downloading PDF: ${e.toString()}',
-          ColorManager.error);
+      if (!isCancelled) {
+        log('Error downloading PDF: $e');
+        Navigator.of(context, rootNavigator: true).pop();
+        _showMessageDialog(
+            context, 'Download Error', 'Error downloading PDF: ${e.toString()}',
+            isError: true);
+      }
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
+  }
+
+  void _openDownloadedFile() async {
+    if (_downloadedFilePath != null) {
+      try {
+        final file = File(_downloadedFilePath!);
+        if (await file.exists()) {
+          try {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Dialog(
+                  insetPadding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  elevation: 0,
+                  backgroundColor: ColorManager.white,
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 24.h, horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: ColorManager.white,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "PDF File",
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: ColorManager.green,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Your medical record PDF has been downloaded to:",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 14.sp, color: ColorManager.grey),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorManager.green.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: ColorManager.green,
+                              width: 1,
+                            ),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 8.h),
+                          child: Text(
+                            file.path,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.italic,
+                              color: ColorManager.green,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 8,
+                          runSpacing: 10,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                await Share.shareXFiles(
+                                  [XFile(file.path)],
+                                  text: 'Medical Record',
+                                  subject: 'Medical Record PDF',
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorManager.green,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w, vertical: 8.h),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.share, size: 16.w),
+                                  SizedBox(width: 8.w),
+                                  Text("Share"),
+                                ],
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                Navigator.of(context).pop();
+                                _openFileWithOptions(file);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorManager.green,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w, vertical: 8.h),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.open_with, size: 16.w),
+                                  SizedBox(width: 8.w),
+                                  Text("Open With"),
+                                ],
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: ColorManager.error,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w, vertical: 8.h),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.cancel, size: 16.w),
+                                  SizedBox(width: 8.w),
+                                  Text("Cancel"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          } catch (e) {
+            log('Error opening file with share dialog: $e');
+            _showMessageDialog(
+                context, 'Error', 'Error opening file: ${e.toString()}',
+                isError: true);
+          }
+        } else {
+          _showMessageDialog(context, 'Error', 'File does not exist anymore',
+              isError: true);
+        }
+      } catch (e) {
+        log('Error opening file: $e');
+        _showMessageDialog(
+            context, 'Error', 'Error opening file: ${e.toString()}',
+            isError: true);
+      }
+    }
+  }
+
+  void _openFileWithOptions(File file) async {
+    try {
+      await OpenFilex.open(
+        file.path,
+        type: 'application/pdf',
+      );
+    } catch (e) {
+      log('Error opening file with options: $e');
+      _showMessageDialog(
+          context, 'Error', 'Error opening file: ${e.toString()}',
+          isError: true);
+    }
+  }
+
+  void _showMessageDialog(BuildContext context, String title, String message,
+      {bool isError = false}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          backgroundColor: isError ? Colors.red[50] : Colors.white,
+          titleTextStyle: TextStyle(
+            color: isError ? ColorManager.error : ColorManager.green,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: TextButton.styleFrom(
+                foregroundColor:
+                    isError ? ColorManager.error : ColorManager.green,
+              ),
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -288,12 +578,12 @@ class _NFCScreenState extends State<NFCScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          const SizedBox(height: 16),
-          FloatingActionButton(
-            heroTag: 'nfcButton',
-            backgroundColor: ColorManager.green,
-            onPressed: _isScanning ? null : _scanNFC,
-            child: const Icon(Icons.nfc, color: ColorManager.white),
+          FloatingActionButton.small(
+            heroTag: 'openFileButton',
+            backgroundColor:
+                _isFileDownloaded ? ColorManager.green : ColorManager.grey,
+            onPressed: _isFileDownloaded ? _openDownloadedFile : null,
+            child: const Icon(Icons.open_in_new, color: ColorManager.white),
           ),
           const SizedBox(height: 16),
           FloatingActionButton(
@@ -310,6 +600,13 @@ class _NFCScreenState extends State<NFCScreen> {
                   }
                 : null,
             child: const Icon(Icons.save, color: ColorManager.white),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'nfcButton',
+            backgroundColor: ColorManager.green,
+            onPressed: _isScanning ? null : _scanNFC,
+            child: const Icon(Icons.nfc, color: ColorManager.white),
           ),
         ],
       ),

@@ -18,3 +18,48 @@ void customSnackBar(BuildContext context,
         ),
       )));
 }
+
+void downloadProgressSnackBar(BuildContext context, double progress,
+    {String? message, Color? color, bool isDone = false}) {
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      duration: isDone ? const Duration(seconds: 3) : const Duration(days: 1),
+      backgroundColor: (color ?? ColorManager.green).withOpacity(0.9),
+      behavior: SnackBarBehavior.floating,
+      content: Row(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  message ?? "Downloading PDF...",
+                  style: context.textTheme.bodySmall?.copyWith(color: ColorManager.white),
+                ),
+                const SizedBox(height: 8),
+                LinearProgressIndicator(
+                  value: progress,
+                  backgroundColor: Colors.white.withOpacity(0.3),
+                  valueColor: AlwaysStoppedAnimation<Color>(ColorManager.white),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  "${(progress * 100).toStringAsFixed(0)}%",
+                  style: context.textTheme.bodySmall?.copyWith(color: ColorManager.white),
+                ),
+              ],
+            ),
+          ),
+          if (isDone)
+            Icon(
+              Icons.check_circle,
+              color: ColorManager.white,
+            ),
+        ],
+      ),
+    ),
+  );
+}

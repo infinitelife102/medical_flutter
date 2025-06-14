@@ -10,6 +10,7 @@ import '../../core/utils/helper/scaffold_snakbar.dart';
 
 class ChatBubbleForLoading extends StatelessWidget {
   const ChatBubbleForLoading({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -57,6 +58,8 @@ class ChatBubbleForDrAi extends StatefulWidget {
 
 class _ChatBubbleForDrAiState extends State<ChatBubbleForDrAi> {
   bool _isShowDateTime = false;
+  bool _isCopied = false;
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.bloc<ValidationCubit>();
@@ -106,16 +109,27 @@ class _ChatBubbleForDrAiState extends State<ChatBubbleForDrAi> {
                     cubit.copyText(widget.message);
                     customSnackBar(
                         context, "Text copied to clipboard", null, 1);
+                    setState(() {
+                      _isCopied = true;
+                    });
+
+                    Future.delayed(const Duration(seconds: 2), () {
+                      if (mounted) {
+                        setState(() {
+                          _isCopied = false;
+                        });
+                      }
+                    });
                   },
-                  icon: const Icon(
-                    shadows: [
+                  icon: Icon(
+                    shadows: const [
                       BoxShadow(
                           blurRadius: BorderSide.strokeAlignOutside,
                           color: ColorManager.grey)
                     ],
-                    Icons.content_copy,
+                    _isCopied ? Icons.check : Icons.content_copy,
                     size: 20,
-                    color: ColorManager.grey,
+                    color: _isCopied ? ColorManager.green : ColorManager.grey,
                   )),
             ],
           ),
