@@ -16,6 +16,8 @@ import 'package:open_filex/open_filex.dart';
 import '../../../controller/medical_record/medical_record_cubit.dart';
 import '../../../core/utils/theme/color.dart';
 import '../../../core/utils/permission_manager.dart';
+import '../../../core/utils/helper/custom_dialog.dart';
+import '../../../core/utils/constant/image.dart';
 
 class NFCScreen extends StatefulWidget {
   final String? id;
@@ -496,30 +498,15 @@ class _NFCScreenState extends State<NFCScreen> {
 
   void _showMessageDialog(BuildContext context, String title, String message,
       {bool isError = false}) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          backgroundColor: isError ? Colors.red[50] : Colors.white,
-          titleTextStyle: TextStyle(
-            color: isError ? ColorManager.error : ColorManager.green,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: TextButton.styleFrom(
-                foregroundColor:
-                    isError ? ColorManager.error : ColorManager.green,
-              ),
-              child: Text('OK'),
-            ),
-          ],
-        );
-      },
+    customDialog(
+      context,
+      title: title,
+      errorMessage: message,
+      subtitle: '',
+      buttonTitle: 'Cancel',
+      onPressed: () => Navigator.of(context).pop(),
+      image: isError ? ImageManager.errorIcon : ImageManager.trueIcon,
+      dismiss: true,
     );
   }
 
@@ -586,7 +573,7 @@ class _NFCScreenState extends State<NFCScreen> {
             child: const Icon(Icons.open_in_new, color: ColorManager.white),
           ),
           const SizedBox(height: 16),
-          FloatingActionButton(
+          FloatingActionButton.small(
             heroTag: 'saveButton',
             backgroundColor:
                 (_cubit.nfcID != null || _cubit.nfcID?.isNotEmpty == true)
