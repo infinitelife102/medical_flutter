@@ -15,6 +15,8 @@ class EnvManager {
   static String medicalTips = dotenv.env['DAILY_TIPS_BASE_URL']!;
   static String medicalRecord =
       dotenv.env['MEDICAL_RECORD_AND_CONCLUSION_BASE_URL']!;
+  static String medicalRecordPdfBackend =
+      dotenv.env['MEDICAL_RECORD_PDF_BACKEND']!;
   static String defaultMedicalRecordID =
       dotenv.env['DEFAULT_MEDICAL_RECORD_ID']!;
 }

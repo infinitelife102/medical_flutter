@@ -12,8 +12,9 @@ class MedicalRecordCubit extends Cubit<MedicalRecordState> {
   static String defaultId = EnvManager.defaultMedicalRecordID;
 
   String get baseUrl => EnvManager.medicalRecord;
+  String? nfcID;
 
-  String get initialUrl => '${EnvManager.medicalRecord}$defaultId';
+  String get initialUrl => EnvManager.medicalRecord;
 
   void initWebView() {
     emit(state.copyWith(url: '${EnvManager.medicalRecord}$defaultId'));
