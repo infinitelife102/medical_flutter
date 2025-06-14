@@ -1,6 +1,6 @@
+import '../../view/screen/account/about_us/app_feedback_screen.dart';
+import '../../view/screen/account/about_us/app_updates_screen.dart';
 import '../../view/screen/account/about_us/social_media_screen.dart';
-import '../../view/screen/account/app_feedback_screen.dart';
-import '../../view/screen/account/app_updates_screen.dart';
 import '../../view/screen/account/privacy_policy.dart';
 import '../../view/screen/account/terms_and_conditions.dart';
 import 'routes.dart';
