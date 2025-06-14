@@ -58,7 +58,8 @@ class AboutUsScreen extends StatelessWidget {
                     image: ImageManager.splashLogo,
                     onPressed: () => context.push(CustomErrorScreen(
                         errorMessage: "Support is currently unavailable",
-                        stackTrace: "Please try again later"))),
+                        stackTrace:
+                            "This is a test designed to simulate a production exception"))),
               ],
             ),
           ),

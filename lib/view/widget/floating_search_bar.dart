@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:uuid/uuid.dart';
 import 'dart:async';
 
@@ -43,13 +44,13 @@ class MyFloatingSearchBarState extends State<MyFloatingSearchBar> {
 
   @override
   void dispose() {
-
     _debounceTimer?.cancel();
     searchBarController.dispose();
     super.dispose();
   }
 
   List<PlaceSuggestionModel> _placeSuggestionList = [];
+
   @override
   Widget build(BuildContext context) {
     final isPortrait =
@@ -105,6 +106,7 @@ class MyFloatingSearchBarState extends State<MyFloatingSearchBar> {
                 shrinkWrap: true,
                 itemCount: _placeSuggestionList.length,
                 itemBuilder: (context, index) => Card(
+                  color: ColorManager.white,
                   child: ListTile(
                     trailing: Icon(
                       Icons.apartment_rounded,
@@ -143,23 +145,39 @@ class MyFloatingSearchBarState extends State<MyFloatingSearchBar> {
             }
             if (state is MapsLoading) {
               return Padding(
-                padding: EdgeInsets.only(top: 25.h),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 50.w,
-                    height: 50.w,
-                    decoration: const BoxDecoration(
+                padding: EdgeInsets.only(
+                    top: 10.h, bottom: MediaQuery.viewInsetsOf(context).bottom),
+                child: Skeletonizer(
+                  enabled: true,
+                  effect: ShimmerEffect(
+                    baseColor: ColorManager.grey.withOpacity(0.2),
+                    highlightColor: ColorManager.white,
+                  ),
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: 3, // Show 3 shimmer items
+                    itemBuilder: (context, index) => Card(
                       color: ColorManager.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: SizedBox(
-                      width: 25.w,
-                      height: 25.w,
-                      child: const CircularProgressIndicator(
-                        strokeCap: StrokeCap.round,
-                        color: ColorManager.green,
+                      child: ListTile(
+                        trailing: Icon(
+                          Icons.apartment_rounded,
+                          size: 20.r,
+                          color: ColorManager.green,
+                        ),
+                        leading: Icon(
+                          Icons.place,
+                          size: 20.r,
+                          color: ColorManager.green,
+                        ),
+                        title: const Text(
+                          "Hospital Name",
+                          textAlign: TextAlign.center,
+                        ),
+                        subtitle: const Text(
+                          "Hospital Address, City, Country",
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                     ),
                   ),
