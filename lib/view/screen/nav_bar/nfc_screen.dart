@@ -1,8 +1,10 @@
 import 'package:dr_ai/core/utils/constant/api_url.dart';
 import 'package:dr_ai/core/utils/helper/scaffold_snakbar.dart';
 import 'package:dr_ai/core/utils/helper/download_dialog.dart';
+import 'package:dr_ai/view/widget/button_loading_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:dr_ai/core/service/nfc_service.dart';
 import 'dart:developer';
@@ -18,6 +20,7 @@ import '../../../core/utils/theme/color.dart';
 import '../../../core/utils/permission_manager.dart';
 import '../../../core/utils/helper/custom_dialog.dart';
 import '../../../core/utils/constant/image.dart';
+import '../../widget/custom_tooltip.dart';
 
 class NFCScreen extends StatefulWidget {
   final String? id;
@@ -520,12 +523,12 @@ class _NFCScreenState extends State<NFCScreen> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: WebViewWidget(controller: _controller)),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(
-                color: ColorManager.green,
-              ),
-            ),
+          // if (_isLoading)
+          //   const Center(
+          //     child: CircularProgressIndicator(
+          //       color: ColorManager.green,
+          //     ),
+          //   ),
           if (_isScanning)
             Container(
               color: Colors.black.withOpacity(0.5),
@@ -533,9 +536,7 @@ class _NFCScreenState extends State<NFCScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(
-                      color: ColorManager.green,
-                    ),
+                  ButtonLoadingIndicator(),
                     SizedBox(height: 20),
                     Text(
                       'Scanning NFC...',
@@ -552,12 +553,16 @@ class _NFCScreenState extends State<NFCScreen> {
           Positioned(
             top: 40.h,
             right: 8,
-            child: FloatingActionButton.small(
-              heroTag: 'refreshButton',
-              shape: CircleBorder(),
-              backgroundColor: ColorManager.green,
-              onPressed: () => _controller.reload(),
-              child: const Icon(Icons.refresh, color: ColorManager.white),
+            child: CustomToolTip(
+              bottomMargin: 20,
+              message: 'Reload',
+              child: FloatingActionButton.small(
+                heroTag: 'refreshButton',
+                shape: CircleBorder(),
+                backgroundColor: ColorManager.green,
+                onPressed: () => _controller.reload(),
+                child: const Icon(Icons.refresh, color: ColorManager.white),
+              ),
             ),
           ),
         ],
@@ -565,35 +570,47 @@ class _NFCScreenState extends State<NFCScreen> {
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FloatingActionButton.small(
-            heroTag: 'openFileButton',
-            backgroundColor:
-                _isFileDownloaded ? ColorManager.green : ColorManager.grey,
-            onPressed: _isFileDownloaded ? _openDownloadedFile : null,
-            child: const Icon(Icons.open_in_new, color: ColorManager.white),
+          CustomToolTip(
+            bottomMargin: 20,
+            message: 'Share PDF',
+            child: FloatingActionButton.small(
+              heroTag: 'openFileButton',
+              backgroundColor:
+                  _isFileDownloaded ? ColorManager.green : ColorManager.grey,
+              onPressed: _isFileDownloaded ? _openDownloadedFile : null,
+              child: const Icon(Icons.open_in_new, color: ColorManager.white),
+            ),
           ),
-          const SizedBox(height: 16),
-          FloatingActionButton.small(
-            heroTag: 'saveButton',
-            backgroundColor:
-                (_cubit.nfcID != null || _cubit.nfcID?.isNotEmpty == true)
-                    ? ColorManager.green
-                    : ColorManager.grey,
-            onPressed: _cubit.nfcID != null
-                ? () {
-                    String pdfUrl =
-                        '${EnvManager.medicalRecordPdfBackend}${_cubit.nfcID}/generate-pdf/';
-                    _downloadPDF(pdfUrl);
-                  }
-                : null,
-            child: const Icon(Icons.save, color: ColorManager.white),
+          Gap(10.h),
+          CustomToolTip(
+            bottomMargin: 20,
+            message: 'Download PDF',
+            child: FloatingActionButton.small(
+              heroTag: 'saveButton',
+              backgroundColor:
+                  (_cubit.nfcID != null || _cubit.nfcID?.isNotEmpty == true)
+                      ? ColorManager.green
+                      : ColorManager.grey,
+              onPressed: _cubit.nfcID != null
+                  ? () {
+                      String pdfUrl =
+                          '${EnvManager.medicalRecordPdfBackend}${_cubit.nfcID}/generate-pdf/';
+                      _downloadPDF(pdfUrl);
+                    }
+                  : null,
+              child: const Icon(Icons.save, color: ColorManager.white),
+            ),
           ),
-          const SizedBox(height: 16),
-          FloatingActionButton(
-            heroTag: 'nfcButton',
-            backgroundColor: ColorManager.green,
-            onPressed: _isScanning ? null : _scanNFC,
-            child: const Icon(Icons.nfc, color: ColorManager.white),
+          Gap(10.h),
+          CustomToolTip(
+            bottomMargin: 20,
+            message: 'Scan NFC',
+            child: FloatingActionButton(
+              heroTag: 'nfcButton',
+              backgroundColor: ColorManager.green,
+              onPressed: _isScanning ? null : _scanNFC,
+              child: const Icon(Icons.nfc, color: ColorManager.white),
+            ),
           ),
         ],
       ),
