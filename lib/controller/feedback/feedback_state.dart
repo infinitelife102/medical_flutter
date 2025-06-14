@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import '../../../data/model/feedback_model.dart';
+part of 'feedback_cubit.dart';
 
 abstract class FeedbackState extends Equatable {
   const FeedbackState();

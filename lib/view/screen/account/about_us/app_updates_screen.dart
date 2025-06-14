@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import '../../../core/utils/constant/image.dart';
-import '../../../core/utils/theme/color.dart';
-import '../../../core/utils/theme/fonts.dart';
+
+import '../../../../core/utils/constant/image.dart';
+import '../../../../core/utils/theme/color.dart';
+import '../../../../core/utils/theme/fonts.dart';
 
 class AppUpdatesScreen extends StatelessWidget {
   const AppUpdatesScreen({super.key});

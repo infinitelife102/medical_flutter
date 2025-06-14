@@ -1,7 +1,7 @@
+import '../../view/screen/account/about_us/social_media_screen.dart';
 import '../../view/screen/account/app_feedback_screen.dart';
 import '../../view/screen/account/app_updates_screen.dart';
 import '../../view/screen/account/privacy_policy.dart';
-import '../../view/screen/account/social_media_screen.dart';
 import '../../view/screen/account/terms_and_conditions.dart';
 import 'routes.dart';
 import '../../controller/auth/log_out/log_out_cubit.dart';
@@ -15,7 +15,7 @@ import '../../controller/auth/sign_in/sign_in_cubit.dart';
 import '../../controller/auth/sign_up/sign_up_cubit.dart';
 import '../../controller/launch_uri/launch_uri_cubit.dart';
 import '../../controller/maps/maps_cubit.dart';
-import '../../view/screen/account/about_us_screen.dart';
+import '../../view/screen/account/about_us/about_us_screen.dart';
 import '../../view/screen/account/change_password/new_pass_word.dart';
 import '../../view/screen/account/change_password/old_password_screen.dart';
 import '../../view/screen/auth/create_profile.dart';

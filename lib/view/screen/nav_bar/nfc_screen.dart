@@ -17,7 +17,7 @@ import 'package:open_filex/open_filex.dart';
 
 import '../../../controller/medical_record/medical_record_cubit.dart';
 import '../../../core/utils/theme/color.dart';
-import '../../../core/utils/permission_manager.dart';
+import '../../../core/utils/helper/permission_manager.dart';
 import '../../../core/utils/helper/custom_dialog.dart';
 import '../../../core/utils/constant/image.dart';
 import '../../widget/custom_tooltip.dart';
