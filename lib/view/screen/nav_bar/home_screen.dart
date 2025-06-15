@@ -105,7 +105,7 @@ class HomeScreen extends StatelessWidget {
         ),
         ContactCard(
           image: ImageManager.policeIcon,
-          title: "Amergency",
+          title: "Emergency",
           number: "112",
           color: ColorManager.darkBlue,
         ),
