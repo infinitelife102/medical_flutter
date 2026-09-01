@@ -16,7 +16,7 @@ A Flutter-based personal medical assistant app that combines AI consultation, ho
 
 > This project is intended for educational and portfolio purposes and does not replace professional medical diagnosis.
 
----
+----
 
 ## Key Features
 
