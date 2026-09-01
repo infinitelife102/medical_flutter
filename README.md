@@ -51,7 +51,7 @@ A Flutter-based personal medical assistant app that combines AI consultation, ho
 - **Local Storage**: Hive (`hive`, `hive_flutter`)
 - **Device Features**: NFC, Speech-to-Text, TTS, Share, File Open
 
----
+----
 
 ## Screenshots
 
